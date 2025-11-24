@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Test Generator</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo">
+      <h1>English Test Generator</h1>
+    </div>
+    <nav>
+      <button id="btn-home">Home</button>
+      <button id="btn-generate">Generate Test</button>
+      <button id="btn-results">Results</button>
+    </nav>
+  </header>
+
+  <main id="main-view">
+
+    <!-- Home Section -->
+    <section id="home-section" class="view active">
+      <h2>Paste your English text below</h2>
+      <textarea id="text-input" placeholder="Paste or type any English text here..."></textarea>
+
+      <div class="options">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="basic">Basic</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+
+      <button id="btn-generate-test">Generate Test</button>
+
+      <div id="loader" class="hidden">Analyzing text and generating test...</div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz-section" class="view hidden">
+      <h2>Generated Test</h2>
+      <div id="quiz-container"></div>
+
+      <div class="quiz-actions">
+        <button id="btn-check-answers">Check Answers</button>
+        <button id="btn-regenerate">Regenerate</button>
+        <button id="btn-restart">Restart</button>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section" class="view hidden">
+      <h2>Results</h2>
+      <p>Your Score: <span id="final-score">0</span>%</p>
+      <button id="btn-export-pdf">Export as PDF</button>
+      <button id="btn-export-json">Export as JSON</button>
+      <button id="btn-back-home">Back to Home</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2025 English Test Generator — Built for Academy Language Learners</p>
+  </footer>
+
+  <script src="scripts/app.js"></script>
+  <script src="scripts/textProcessor.js"></script>
+  <script src="scripts/quizGenerator.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/export.js"></script>
+
+</body>
+</html>
