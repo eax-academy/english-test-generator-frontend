@@ -1,11 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { forgotPassword } from '../../services/api';
 
-interface ForgotPasswordFormProps {
-    setView: (view: any) => void;
-}
-
-const ForgotPasswordForm = ({ setView }: ForgotPasswordFormProps) => {
+const ForgotPasswordForm = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
 
@@ -38,7 +35,9 @@ const ForgotPasswordForm = ({ setView }: ForgotPasswordFormProps) => {
                     Send Reset Link
                 </button>
                 <p className="auth-switch">
-                    <span onClick={() => setView('login')}>Back to Login</span>
+                    <Link to="/login" style={{ cursor: 'pointer', color: 'var(--primary)', textDecoration: 'none' }}>
+                        Back to Login
+                    </Link>
                 </p>
             </form>
         </div>

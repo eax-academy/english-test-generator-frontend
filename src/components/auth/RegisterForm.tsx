@@ -1,23 +1,21 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../../services/api';
 
-interface RegisterFormProps {
-    setView: (view: any) => void;
-}
-
-const RegisterForm = ({ setView }: RegisterFormProps) => {
+const RegisterForm = () => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         try {
             await registerUser({ name, surname, email, password });
-            setView('login');
+            navigate('/login');
             // Normally you'd pass a success message to the login view, but for now we can just redirect
         } catch (err: any) {
             setError(err.response?.data?.message || 'Registration failed');
@@ -71,9 +69,9 @@ const RegisterForm = ({ setView }: RegisterFormProps) => {
             </form>
             <p className="auth-switch">
                 Already have an account?{' '}
-                <span onClick={() => setView('login')}>
+                <Link to="/login" style={{ cursor: 'pointer', color: 'var(--primary)', textDecoration: 'none' }}>
                     Login
-                </span>
+                </Link>
             </p>
         </div>
     );

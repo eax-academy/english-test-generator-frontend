@@ -1,15 +1,13 @@
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { resetPassword } from '../../services/api';
 
-interface ResetPasswordFormProps {
-    setView: (view: any) => void;
-    resetToken: string;
-}
-
-const ResetPasswordForm = ({ setView, resetToken }: ResetPasswordFormProps) => {
+const ResetPasswordForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const { token } = useParams<{ token: string }>();
 
     const handleResetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,10 +16,14 @@ const ResetPasswordForm = ({ setView, resetToken }: ResetPasswordFormProps) => {
             setError('Passwords do not match');
             return;
         }
+        if (!token) {
+            setError('Invalid or missing reset token');
+            return;
+        }
         try {
-            await resetPassword({ token: resetToken, newPassword: password });
+            await resetPassword({ token, newPassword: password });
             alert('Password reset successful! Please login.');
-            setView('login');
+            navigate('/login');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to reset password');
         }
