@@ -1,8 +1,6 @@
-import { memo, useState } from "react";
+import { memo, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import QuestionCard from "../components/QuestionCard";
-
 import { useQuizContext } from "../hooks/useQuizContext";
 import { useTimer } from "../hooks/useTimer";
 import { type Question } from "../types/types";
@@ -10,12 +8,16 @@ import { type Question } from "../types/types";
 
 function QuizPage() {
     const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
+    const [gradedQuestions, setGradedQuestions] = useState<Record<string, boolean>>({});
 
     const { state } = useLocation() as { state: { quiz: { _id: string; title: string; questions: Question[] } } };
     const { setLastResult } = useQuizContext();
     const { time: elapsedTime, formatTime } = useTimer();
-
     const navigate = useNavigate();
+
+    const handleCheckQuestion = useCallback((qId: string) => {
+        setGradedQuestions(prev => ({ ...prev, [qId]: true }));
+    }, []);
 
     if (!state?.quiz) {
         return (
@@ -47,6 +49,10 @@ function QuizPage() {
                 Time spent: <span>{formatTime(elapsedTime)}</span>
             </div>
 
+            <div className="text-center text-white font-bold text-lg">
+                Question <span>{Object.keys(gradedQuestions).length}</span> of {questions.length}
+            </div>
+
             <div className="space-y-6">
                 {questions.map((q, i) => (
                     <QuestionCard
@@ -55,7 +61,8 @@ function QuizPage() {
                         index={i}
                         userAnswers={userAnswers}
                         setUserAnswers={setUserAnswers}
-                        checked={false}
+                        checked={!!gradedQuestions[q._id]}
+                        onCheck={() => handleCheckQuestion(q._id)}
                     />
                 ))}
             </div>
