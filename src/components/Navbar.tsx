@@ -1,34 +1,40 @@
 import { BookOpen, LogOut } from 'lucide-react';
-import type { UserData } from '../types';
+import { Link, useNavigate } from 'react-router-dom';
+import type { UserData } from '../types/types';
 
 interface NavbarProps {
-    view: string;
-    setView: (view: 'landing' | 'login' | 'register') => void; // specific types or just string
     user: UserData | null;
     handleLogout: () => void;
 }
 
-const Navbar = ({ view, setView, user, handleLogout }: NavbarProps) => {
+const Navbar = ({ user, handleLogout }: NavbarProps) => {
+    const navigate = useNavigate();
+
+    const onLogout = () => {
+        handleLogout();
+        navigate('/');
+    };
+
     return (
         <nav className="navbar">
-            <div className="nav-logo" onClick={() => setView('landing')}>
+            <Link to="/" className="nav-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="logo-icon">
                     <BookOpen size={24} color="white" />
                 </div>
                 <span className="logo-text">English Test Platform</span>
-            </div>
+            </Link>
             <div className="nav-actions">
-                {view === 'dashboard' ? (
+                {user ? (
                     <div className="user-menu">
-                        <span className="user-name">{user?.name}</span>
-                        <button className="logout-btn" onClick={handleLogout}>
+                        <span className="user-name">{user.name}</span>
+                        <button className="logout-btn" onClick={onLogout}>
                             <LogOut size={18} />
                         </button>
                     </div>
                 ) : (
                     <>
-                        <button className="login-btn" onClick={() => setView('login')}>Login</button>
-                        <button className="get-started-btn" onClick={() => setView('register')}>Get Started</button>
+                        <Link to="/login" className="login-btn">Login</Link>
+                        <Link to="/register" className="get-started-btn">Get Started</Link>
                     </>
                 )}
             </div>

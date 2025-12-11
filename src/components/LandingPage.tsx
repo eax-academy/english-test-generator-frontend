@@ -1,10 +1,9 @@
 import { BookOpen, CheckCircle2, Clock, Medal, Target, Trophy } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-interface LandingPageProps {
-    setView: (view: 'register') => void;
-}
+const LandingPage = () => {
+    const navigate = useNavigate();
 
-const LandingPage = ({ setView }: LandingPageProps) => {
     return (
         <>
             {/* Hero Section */}
@@ -13,7 +12,7 @@ const LandingPage = ({ setView }: LandingPageProps) => {
                 <p className="hero-subtitle">
                     Improve your English skills with our adaptive testing platform. Choose your difficulty level and track your progress over time.
                 </p>
-                <button className="cta-btn" onClick={() => setView('register')}>Start Learning Today</button>
+                <button className="cta-btn" onClick={() => navigate('/register')}>Start Learning Today</button>
             </section>
 
             {/* Features Section */}

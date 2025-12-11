@@ -1,16 +1,17 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../../services/api';
-import type { UserData } from '../../types';
+import type { UserData } from '../../types/types';
 
 interface LoginFormProps {
-    setView: (view: any) => void;
     setUser: (user: UserData) => void;
 }
 
-const LoginForm = ({ setView, setUser }: LoginFormProps) => {
+const LoginForm = ({ setUser }: LoginFormProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,7 +22,7 @@ const LoginForm = ({ setView, setUser }: LoginFormProps) => {
             // Check if name is top-level OR inside a user object
             const userName = response.data.name || response.data.user?.name || 'User';
             setUser({ name: userName, email });
-            setView('dashboard');
+            navigate('/dashboard');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed');
         }
@@ -51,12 +52,12 @@ const LoginForm = ({ setView, setUser }: LoginFormProps) => {
                     />
                 </div>
                 <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
-                    <span
-                        style={{ color: 'var(--primary)', cursor: 'pointer', fontSize: '0.9rem' }}
-                        onClick={() => setView('forgot-password')}
+                    <Link
+                        to="/forgot-password"
+                        style={{ color: 'var(--primary)', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'none' }}
                     >
                         Forgot Password?
-                    </span>
+                    </Link>
                 </div>
                 <button type="submit" className="auth-submit-btn">
                     Login
@@ -64,9 +65,9 @@ const LoginForm = ({ setView, setUser }: LoginFormProps) => {
             </form>
             <p className="auth-switch">
                 Don't have an account?{' '}
-                <span onClick={() => setView('register')}>
+                <Link to="/register" style={{ cursor: 'pointer', color: 'var(--primary)', textDecoration: 'none' }}>
                     Sign up
-                </span>
+                </Link>
             </p>
         </div>
     );
