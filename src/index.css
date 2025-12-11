@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 100vh;
+  
+  /* Netflix-style gradient */
+  background: linear-gradient(135deg, #141414, #b81d24, #2c2c2c);
+  background-size: 300% 300%;
+  
+  /* Smooth animation */
+  animation: gradientMove 10s ease-in-out infinite;
+  
+  /* Optional: text color for contrast */
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+}
+
+/* @keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+} */
