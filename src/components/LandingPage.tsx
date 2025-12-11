@@ -12,7 +12,14 @@ const LandingPage = () => {
                 <p className="hero-subtitle">
                     Improve your English skills with our adaptive testing platform. Choose your difficulty level and track your progress over time.
                 </p>
-                <button className="cta-btn" onClick={() => navigate('/register')}>Start Learning Today</button>
+                <button className="cta-btn" onClick={() => {
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                        navigate('/dashboard');
+                    } else {
+                        navigate('/register');
+                    }
+                }}>Start Learning Today</button>
             </section>
 
             {/* Features Section */}
