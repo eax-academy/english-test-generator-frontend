@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
+import { API } from "../config/api.config";
 import { type Quiz } from "../types/types";
 import { useQuizContext } from "../hooks/useQuizContext";
+import { useTimer } from "../hooks/useTimer";
 
 
 export default function ResultsPage() {
     const { quizId } = useParams();
+    const { formatTime } = useTimer();
+    const {
+        lastQuiz,
+        lastScore,
+        lastElapsedTime
+    } = useQuizContext();
     const navigate = useNavigate();
-    const { lastQuiz, lastScore } = useQuizContext();
 
     const [quiz, setQuiz] = useState<Quiz | null>(lastQuiz || null);
     const [score] = useState<number>(lastScore || 0);
@@ -20,7 +27,7 @@ export default function ResultsPage() {
 
         let isMounted = true;
 
-        fetch(`http://localhost:8080/api/quiz/${quizId}`)
+        fetch(`${API}/${quizId}`)
             .then(res => {
                 if (!res.ok) throw new Error("Quiz not found");
                 return res.json();
@@ -86,8 +93,10 @@ export default function ResultsPage() {
                 <h2 className="text-2xl font-semibold text-white animate-pulse">{getMessage()}</h2>
 
                 <p className="text-lg font-medium text-white">
-                    Score: <span className="text-red-600">{score}</span> / {total} ({percentage}%)
+                    Score: <span className="text-red-600">{score}</span> / {total} ({percentage}%) <br />
+                    Time spent: <span className="text-red-600">{formatTime(lastElapsedTime ?? 0)}</span>
                 </p>
+
 
                 <div className="h-6 w-full bg-gray-700 rounded-full overflow-hidden mt-4">
                     <div

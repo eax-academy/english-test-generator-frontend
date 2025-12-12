@@ -9,7 +9,6 @@ interface QuestionCardProps {
     onCheck?: () => void;
 }
 
-
 function QuestionCard({ q, index, userAnswers, setUserAnswers, checked, onCheck }: QuestionCardProps) {
     const handleChange = (value: string) => {
         setUserAnswers(prev => ({ ...prev, [q._id]: value }));

@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import type { Question } from "../components/QuestionCard";
+import type { Question } from "../types/types";
 
 export type Quiz = {
   _id: string;

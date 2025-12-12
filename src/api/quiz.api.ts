@@ -1,8 +1,7 @@
 import axios from "axios";
-import type { CreatedQuizData, ReturnedQuizData } from "../types/types";
 import type { AxiosResponse } from "axios";
-
-const API = "http://localhost:8080/api/quiz/";
+import { API } from "../config/api.config";
+import type { CreatedQuizData, ReturnedQuizData } from "../types/types";
 
 export const createQuiz = async (data: CreatedQuizData): Promise<ReturnedQuizData> => {
   try {

@@ -21,12 +21,13 @@ export interface ReturnedQuizData {
 }
 
 export type Question = {
-    _id: string;
-    question: string;
-    answer: string;
-    type?: string;
-    options?: string[];
-};
+  _id: string;
+  type: string;
+  question: string;
+  answer: string;
+  options?: string[];
+  wordId?: { _id: string; word: string; definition: string; translation: string };
+}
 
 export type Quiz = {
     _id: string;
