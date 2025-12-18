@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Layouts
 import AdminLayout from "./components/AdminLayout";
-import Layout from "./components/shared/Layout";
+import Layout from "./components/Layout";
 
 // Public Pages
 import AboutPage from "./pages/AboutPage";
