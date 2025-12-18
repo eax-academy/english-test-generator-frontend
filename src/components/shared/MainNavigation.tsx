@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+
 import brainLogo from '../../assets/Brain.png';
 import classes from './MainNavigation.module.css';
 
@@ -17,7 +18,29 @@ function MainNavigation() {
                 <ul className={classes.links}>
                     <li>
                         <NavLink
-                            to="/"
+                            to="/admin"
+                            className={({ isActive }) =>
+                                isActive ? classes.active : undefined
+                            }
+                            end
+                        >
+                            Admin
+                        </NavLink>
+                    </li>
+                    
+                    <li>
+                        <NavLink
+                            to="/about"
+                            className={({ isActive }) =>
+                                isActive ? classes.active : undefined
+                            }
+                        >
+                            About
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/home"
                             className={({ isActive }) =>
                                 isActive ? classes.active : undefined
                             }

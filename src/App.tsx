@@ -1,29 +1,63 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Layout from "./components/shared/Layout.tsx";
-import HomePage from "./pages/HomePage.tsx";
-import LoginPage from "./pages/LoginPage.tsx";
-import QuizPage from "./pages/QuizPage.tsx";
-import ResultsPage from "./pages/ResultsPage.tsx";
+// Layouts
+import AdminLayout from "./components/AdminLayout";
+import Layout from "./components/shared/Layout";
 
-import { QuizContextProvider } from "./store/QuizContext.tsx";
+// Public Pages
+import AboutPage from "./pages/AboutPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import QuizPage from "./pages/QuizPage";
+import ResultsPage from "./pages/ResultsPage";
 
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminQuizzes from "./pages/admin/AdminQuizzes";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminResults from "./pages/admin/AdminResults";
+
+import { QuizContextProvider } from "./store/QuizContext";
+
+
+// function AdminRoute({ children }: React.PropsWithChildren) {
+//   const token = localStorage.getItem("admin_token");
+//   return token ? children : <Navigate to="/login" replace />;
+// }
 
 function App() {
   return (
     <QuizContextProvider>
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
+        <Routes>
 
+          {/* ---------- PUBLIC SITE ---------- */}
+          <Route element={<Layout />}>
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/quiz/:quizId" element={<QuizPage />} />
             <Route path="/results/:quizId" element={<ResultsPage />} />
+          </Route>
 
-            <Route path="*" element={<div>404 Not Found</div>} />
-          </Routes>
-        </Layout>
+          {/* ---------- ADMIN PANEL ---------- */}
+          <Route path="/admin" element={<AdminLayout />}>
+            {/* <Route path="/admin" element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+            > */}
+            <Route index element={<AdminDashboard />} />
+            <Route path="quizzes" element={<AdminQuizzes />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="results" element={<AdminResults />} />
+          </Route>
+
+          {/* ---------- 404 ---------- */}
+          <Route path="*" element={<div>404 Not Found</div>} />
+
+        </Routes>
       </BrowserRouter>
     </QuizContextProvider>
   );
