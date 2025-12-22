@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
-import { API } from "../config/api.config";
+import { API, RESULTS_API } from "../config/api.config";
 import { type Quiz } from "../types/types";
 import { useQuizContext } from "../hooks/useQuizContext";
 import { useTimer } from "../hooks/useTimer";
 
 
-export default function ResultsPage() {
+function ResultsPage() {
     const { quizId } = useParams();
     const { formatTime } = useTimer();
     const {
@@ -21,6 +21,7 @@ export default function ResultsPage() {
     const [score] = useState<number>(lastScore || 0);
     const [loading, setLoading] = useState(!lastQuiz);
     const [showConfetti, setShowConfetti] = useState(false);
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         if (quiz || !quizId) return;
@@ -46,6 +47,48 @@ export default function ResultsPage() {
             isMounted = false;
         };
     }, [quizId, quiz]);
+
+
+    useEffect(() => {
+        if (!quiz || score === null || saved) return;
+
+        const saveResult = async () => {
+            try {
+                const response = await fetch(RESULTS_API, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+                    },
+                    body: JSON.stringify({
+                        quizId: quiz._id, 
+                        score: Number(score),      
+                        elapsedTime: lastElapsedTime ?? 0,
+                        totalQuestions: quiz.questions.length,
+                        userId: "guest",
+                    }),
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        console.warn("Too many requests, try again later");
+                        return;
+                    }
+
+                    const errText = await response.text();
+                    throw new Error(errText || "Failed to save result");
+                }
+
+                const data = await response.json();
+                console.log("Result saved:", data);
+                setSaved(true);
+            } catch (err) {
+                console.error("Error saving result:", err);
+            }
+        };
+
+        saveResult();
+    }, [quiz, score, lastElapsedTime, saved]);
 
     // Show confetti if score >= 70%
     useEffect(() => {
@@ -130,3 +173,5 @@ export default function ResultsPage() {
         </div>
     );
 }
+
+export default memo(ResultsPage);

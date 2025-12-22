@@ -19,7 +19,6 @@ import AdminResults from "./pages/admin/AdminResults";
 
 import { QuizContextProvider } from "./store/QuizContext";
 
-
 // function AdminRoute({ children }: React.PropsWithChildren) {
 //   const token = localStorage.getItem("admin_token");
 //   return token ? children : <Navigate to="/login" replace />;
@@ -31,7 +30,6 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          {/* ---------- PUBLIC SITE ---------- */}
           <Route element={<Layout />}>
             <Route path="/about" element={<AboutPage />} />
             <Route path="/home" element={<HomePage />} />
@@ -40,22 +38,20 @@ function App() {
             <Route path="/results/:quizId" element={<ResultsPage />} />
           </Route>
 
-          {/* ---------- ADMIN PANEL ---------- */}
           <Route path="/admin" element={<AdminLayout />}>
-            {/* <Route path="/admin" element={
+            {/* <Route path="/admin" element={      // more secure route for admin
               <AdminRoute>
                 <AdminLayout />
               </AdminRoute>
             }
             > */}
-            <Route index element={<AdminDashboard />} />
-            <Route path="quizzes" element={<AdminQuizzes />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="results" element={<AdminResults />} />
-          </Route>
+              <Route index element={<AdminDashboard />} />
+              <Route path="quizzes" element={<AdminQuizzes />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="results" element={<AdminResults />} />
+            </Route>
 
-          {/* ---------- 404 ---------- */}
-          <Route path="*" element={<div>404 Not Found</div>} />
+            <Route path="*" element={<div>404 Not Found</div>} />
 
         </Routes>
       </BrowserRouter>

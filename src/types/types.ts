@@ -30,7 +30,24 @@ export type Question = {
 }
 
 export type Quiz = {
-    _id: string;
-    title: string;
-    questions: Question[];
+  _id: string;
+  title: string;
+  questions: Question[];
 };
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+
+}
+export interface Result {
+  _id: string;
+  userId: User;
+  quizId: Quiz;
+  score: number;
+  totalQuestions: number;
+  completedAt: string;
+}
