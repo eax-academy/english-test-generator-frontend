@@ -1,12 +1,15 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
 import { API } from "../config/api.config";
+import { getAuthHeader } from "./auth.api";
 import type { CreatedQuizData, ReturnedQuizData } from "../types/types";
 
 export const createQuiz = async (data: CreatedQuizData): Promise<ReturnedQuizData> => {
   try {
     const res: AxiosResponse<{ quiz: ReturnedQuizData; stats: unknown }> =
-      await axios.post(API, data);
+      await axios.post(API, data, {
+        headers: getAuthHeader(),
+      });
 
     if (!res.data.quiz) {
       throw new Error("Invalid response from server");
