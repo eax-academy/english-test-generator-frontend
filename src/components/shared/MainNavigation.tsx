@@ -4,7 +4,18 @@ import brainLogo from '../../assets/Brain.png';
 import classes from './MainNavigation.module.css';
 
 
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../store/AuthContext';
+
 function MainNavigation() {
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
     return (
         <header className={classes.header}>
             <div className={classes.logo}>
@@ -27,7 +38,7 @@ function MainNavigation() {
                             Admin
                         </NavLink>
                     </li>
-                    
+
                     <li>
                         <NavLink
                             to="/about"
@@ -50,14 +61,20 @@ function MainNavigation() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink
-                            to="/login"
-                            className={({ isActive }) =>
-                                isActive ? classes.active : undefined
-                            }
-                        >
-                            Login
-                        </NavLink>
+                        {isAuthenticated ? (
+                            <button onClick={handleLogout} className={classes.logoutBtn}>
+                                Logout
+                            </button>
+                        ) : (
+                            <NavLink
+                                to="/login"
+                                className={({ isActive }) =>
+                                    isActive ? classes.active : undefined
+                                }
+                            >
+                                Login
+                            </NavLink>
+                        )}
                     </li>
                 </ul>
             </nav>

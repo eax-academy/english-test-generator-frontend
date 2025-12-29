@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Layouts
 import AdminLayout from "./components/AdminLayout";
@@ -8,6 +8,9 @@ import Layout from "./components/shared/Layout";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import QuizPage from "./pages/QuizPage";
 import ResultsPage from "./pages/ResultsPage";
 
@@ -16,8 +19,11 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminQuizzes from "./pages/admin/AdminQuizzes";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminResults from "./pages/admin/AdminResults";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminRoute from "./components/AdminRoute";
 
 import { QuizContextProvider } from "./store/QuizContext";
+import { AuthProvider } from "./store/AuthContext";
 
 
 // function AdminRoute({ children }: React.PropsWithChildren) {
@@ -28,37 +34,46 @@ import { QuizContextProvider } from "./store/QuizContext";
 function App() {
   return (
     <QuizContextProvider>
-      <BrowserRouter>
-        <Routes>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
 
-          {/* ---------- PUBLIC SITE ---------- */}
-          <Route element={<Layout />}>
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/quiz/:quizId" element={<QuizPage />} />
-            <Route path="/results/:quizId" element={<ResultsPage />} />
-          </Route>
+            {/* ---------- PUBLIC SITE ---------- */}
+            <Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password/:token" element={<ResetPasswordPage />} /> 
+              <Route path="/quiz/:quizId" element={<QuizPage />} />
+              <Route path="/results/:quizId" element={<ResultsPage />} />
+            </Route>
 
-          {/* ---------- ADMIN PANEL ---------- */}
-          <Route path="/admin" element={<AdminLayout />}>
-            {/* <Route path="/admin" element={
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-            > */}
-            <Route index element={<AdminDashboard />} />
-            <Route path="quizzes" element={<AdminQuizzes />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="results" element={<AdminResults />} />
-          </Route>
 
-          {/* ---------- 404 ---------- */}
-          <Route path="*" element={<div>404 Not Found</div>} />
 
-        </Routes>
-      </BrowserRouter>
+            {/* ---------- ADMIN PANEL ---------- */}
+
+            {/* Admin Login (Public) */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+
+            {/* Protected Admin Routes */}
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="quizzes" element={<AdminQuizzes />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="results" element={<AdminResults />} />
+              </Route>
+            </Route>
+
+            {/* ---------- 404 ---------- */}
+            <Route path="*" element={<div>404 Not Found</div>} />
+
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </QuizContextProvider>
   );
 }
