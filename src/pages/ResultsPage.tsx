@@ -157,7 +157,7 @@ function ResultsPage() {
                         Try Again
                     </button>
                     <button
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/home")}
                         className="px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white font-bold rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer"
                     >
                         Generate New Test
