@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
-import { API, RESULTS_API } from "../config/api.config";
+import { QUIZ_API, RESULTS_API } from "../config/api.config";
 import { type Quiz } from "../types/types";
 import { useQuizContext } from "../hooks/useQuizContext";
 import { useTimer } from "../hooks/useTimer";
@@ -28,7 +28,7 @@ function ResultsPage() {
 
         let isMounted = true;
 
-        fetch(`${API}/${quizId}`)
+        fetch(`${QUIZ_API}/${quizId}`)
             .then(res => {
                 if (!res.ok) throw new Error("Quiz not found");
                 return res.json();

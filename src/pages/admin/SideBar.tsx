@@ -1,14 +1,18 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../store/AuthContext";
 
 function Sidebar() {
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const handleLogout = () => {
         const confirmed = window.confirm("Are you sure you want to logout?");
 
         if (confirmed) {
-            localStorage.removeItem("admin_token");
-            navigate("/login");
+            navigate("/home");
+            setTimeout(() => {
+                logout();
+            }, 50);
         }
     };
 

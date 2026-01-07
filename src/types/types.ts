@@ -12,6 +12,16 @@ export type Quiz = {
   title: string;
   questions: Question[];
 };
+
+export interface User {
+  _id: string;
+  name: string;
+  surname?: string;
+  email: string;
+  role?: string;
+  quizCount?: number;
+  createdAt: string;
+}
 export interface CreatedQuizData {
   title: string;
   text: string;
@@ -28,20 +38,10 @@ export interface ReturnedQuizData {
   difficulty: string;
   questions: { question: string; options: string[]; answer: string }[];
   keywords: string[];
-  createdBy: string;
+  createdBy: string | User;
   createdAt: string;
   updatedAt: string;
 }
-
-
-export interface User {
-  _id: string;
-  name: string;
-  surname: string;
-  email: string;
-  role: "user" | "admin";
-  createdAt: string;
-};
 export interface Result {
   _id: string;
   userId: User;
@@ -49,5 +49,31 @@ export interface Result {
   score: number;
   totalQuestions: number;
   completedAt: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
 }
 

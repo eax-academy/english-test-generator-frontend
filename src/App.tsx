@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Layouts
 import AdminLayout from "./components/AdminLayout";
@@ -8,6 +8,9 @@ import Layout from "./components/Layout";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import QuizPage from "./pages/QuizPage";
 import ResultsPage from "./pages/ResultsPage";
 
@@ -16,45 +19,46 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminQuizzes from "./pages/admin/AdminQuizzes";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminResults from "./pages/admin/AdminResults";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminRoute from "./components/AdminRoute";
 
 import { QuizContextProvider } from "./store/QuizContext";
-
-// function AdminRoute({ children }: React.PropsWithChildren) {
-//   const token = localStorage.getItem("admin_token");
-//   return token ? children : <Navigate to="/login" replace />;
-// }
+import { AuthProvider } from "./store/AuthContext";
 
 function App() {
   return (
     <QuizContextProvider>
-      <BrowserRouter>
-        <Routes>
-
-          <Route element={<Layout />}>
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/quiz/:quizId" element={<QuizPage />} />
-            <Route path="/results/:quizId" element={<ResultsPage />} />
-          </Route>
-
-          <Route path="/admin" element={<AdminLayout />}>
-            {/* <Route path="/admin" element={      // more secure route for admin
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-            > */}
-              <Route index element={<AdminDashboard />} />
-              <Route path="quizzes" element={<AdminQuizzes />} />
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="results" element={<AdminResults />} />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* ---------- PUBLIC SITE ---------- */}
+            <Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+              <Route path="/quiz/:quizId" element={<QuizPage />} />
+              <Route path="/results/:quizId" element={<ResultsPage />} />
             </Route>
 
-            <Route path="*" element={<div>404 Not Found</div>} />
+            {/* ---------- ADMIN PANEL ---------- */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
 
-        </Routes>
-      </BrowserRouter>
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="quizzes" element={<AdminQuizzes />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="results" element={<AdminResults />} />
+              </Route>
+            </Route>
+            <Route path="*" element={<div>404 Not Found</div>} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </QuizContextProvider>
   );
 }
