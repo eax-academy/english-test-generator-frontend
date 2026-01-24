@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiLogin } from "../api/auth.api";
 import { useAuth } from "../store/AuthContext";
 import axios from "axios";
+import styles from "./LoginPage.module.css";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -30,81 +32,63 @@ function LoginPage() {
     };
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="z-10 w-full max-w-[450px] space-y-8 rounded-lg bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
+        <div className={styles.loginContainer}>
+            <div className={styles.loginBox}>
                 <div>
-                    <h2 className="text-center text-3xl font-bold text-white">
-                        Sign In
-                    </h2>
+                    <h2 className={styles.loginTitle}>Sign In</h2>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <div>
-                            <input
-                                id="email-address"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
-                                placeholder="Email or phone number"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    {error && <div className="text-sm text-[#e87c03]">{error}</div>}
-
+                <form className={styles.loginForm} onSubmit={handleSubmit}>
                     <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
-                        >
-                            {loading ? "Signing in..." : "Sign In"}
-                        </button>
+                        <input
+                            id="email-address"
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            required
+                            className={styles.loginInput}
+                            placeholder="Email or phone number"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
-
-                    <div className="flex items-center justify-between text-[#b3b3b3] text-sm">
-                        <div className="flex items-center">
+                    <div>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autoComplete="current-password"
+                            required
+                            className={styles.loginInput}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    {error && <div className={styles.loginError}>{error}</div>}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className={styles.loginButton}
+                    >
+                        {loading ? "Signing in..." : "Sign In"}
+                    </button>
+                    <div className={styles.loginOptions}>
+                        <div className={styles.loginRemember}>
                             <input
                                 id="remember-me"
                                 name="remember-me"
                                 type="checkbox"
-                                className="h-4 w-4 rounded border-gray-600 bg-[#333] text-gray-500 focus:ring-0 focus:ring-offset-0"
                             />
-                            <label htmlFor="remember-me" className="ml-2 block">
-                                Remember me
-                            </label>
+                            <label htmlFor="remember-me">Remember me</label>
                         </div>
-                        <div className="text-sm">
-                            <Link to="/forgot-password" className="hover:underline">Forgot Password?</Link>
+                        <div>
+                            <Link to="/forgot-password">Forgot Password?</Link>
                         </div>
                     </div>
                 </form>
-
-                <div className="mt-16 text-left">
-                    <div className="text-[#737373] text-base">
-                        New to English Test Generator?{" "}
-                        <Link to="/register" className="font-medium text-white hover:underline">
-                            Sign up now
-                        </Link>
-                        .
-                    </div>
+                <div className={styles.loginFooter}>
+                    New to English Test Generator?{' '}
+                    <Link to="/register">Sign up now</Link>.
                 </div>
             </div>
         </div>

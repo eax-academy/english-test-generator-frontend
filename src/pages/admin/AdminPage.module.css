@@ -1,0 +1,102 @@
+/*
+  Shared admin page styles for consistency with user pages (Login, Home, About, etc).
+*/
+
+.adminPageContainer {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.5rem 1rem 2rem 1rem;
+  box-sizing: border-box;
+  color: #fff;
+  background: none;
+  animation: fadeIn 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminPageTitle {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #e50914;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+  animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminPageSection {
+  width: 100%;
+  max-width: 800px;
+  background: #23272f;
+  border-radius: 1.1rem;
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.13);
+  border: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 2.5rem;
+  padding: 2rem 1.5rem;
+  animation: fadeIn 1.3s 0.2s backwards;
+}
+
+.adminTable {
+  width: 100%;
+  max-width: 700px;
+  background: #1f1f1f;
+  border-radius: 0.7rem;
+  box-shadow: 0 4px 16px 0 rgba(229,9,20,0.10);
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.adminTable th, .adminTable td {
+  padding: 0.7rem 0.7rem;
+  text-align: center;
+}
+
+.adminTable th {
+  color: #b3b3b3;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: #18181b;
+  text-transform: uppercase;
+}
+
+.adminTable tr {
+  transition: background 0.18s;
+}
+
+.adminTable tr:hover {
+  background: #23272f;
+}
+
+.adminActionButton {
+  background: #e50914;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  margin: 0 0.2rem;
+}
+
+.adminActionButton:hover {
+  background: #b81d24;
+  transform: translateY(-2px) scale(1.04);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: none; }
+}

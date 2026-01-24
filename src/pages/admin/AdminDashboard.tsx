@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { USERS_API, QUIZ_API, RESULTS_API } from "../../config/api.config";
 import { getAuthHeader } from "../../api/auth.api";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import styles from "./AdminPage.module.css";
 
 interface Result {
   _id: string;
@@ -87,68 +89,61 @@ function AdminDashboard() {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="text-white p-8">Loading stats...</div>;
+  if (loading) return <div className={styles.adminPageContainer}>Loading stats...</div>;
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <h2 className="text-3xl font-bold text-white mb-8">Dashboard Overview</h2>
-
-      {/* KPI GRID */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard title="Total Users" value={stats.users} icon="users" color="blue" />
-        <KpiCard title="Total Quizzes" value={stats.quizzes} icon="book" color="green" />
-        <KpiCard title="Tests Taken" value={stats.totalTests} icon="clipboard" color="purple" />
-        <KpiCard title="Avg. Score" value={`${stats.avgScore}%`} icon="chart" color="yellow" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* CHART SECTION */}
-        <div className="lg:col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-6">Activity Trend (Last 30 Days)</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="date" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-                  itemStyle={{ color: '#E5E7EB' }}
-                />
-                <Line type="monotone" dataKey="tests" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+    <div className={styles.adminPageContainer}>
+      <div className={styles.adminPageSection}>
+        <h2 className={styles.adminPageTitle}>Dashboard Overview</h2>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', gap:'1.5rem', marginBottom:'2.5rem'}}>
+          <KpiCard title="Total Users" value={stats.users} icon="users" color="blue" />
+          <KpiCard title="Total Quizzes" value={stats.quizzes} icon="book" color="green" />
+          <KpiCard title="Tests Taken" value={stats.totalTests} icon="clipboard" color="purple" />
+          <KpiCard title="Avg. Score" value={`${stats.avgScore}%`} icon="chart" color="yellow" />
         </div>
-
-        {/* RECENT ACTIVITY TABLE */}
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg overflow-hidden">
-          <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
-          <div className="overflow-y-auto max-h-64 pr-2">
-            <table className="w-full text-left">
-              <tbody className="divide-y divide-gray-700">
-                {recentActivity.map((result) => (
-                  <tr key={result._id} className="group hover:bg-gray-700/50 transition-colors">
-                    <td className="py-3">
-                      <p className="text-sm font-medium text-white">{result.userId?.name || 'Unknown User'}</p>
-                      <p className="text-xs text-gray-400">{new Date(result.completedAt).toLocaleDateString()}</p>
-                    </td>
-                    <td className="py-3 text-right">
-                      <p className="text-sm text-gray-300 truncate max-w-[120px] ml-auto">{result.quizId?.title || 'Unknown Quiz'}</p>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${result.score >= 70 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                        }`}>
-                        {Math.round(result.score)}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-                {recentActivity.length === 0 && (
-                  <tr>
-                    <td className="py-4 text-center text-gray-500 italic">No recent activity</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+        <div style={{display:'grid', gridTemplateColumns:'2fr 1fr', gap:'2rem', alignItems:'flex-start'}}>
+          <div style={{background:'#23272f', borderRadius:'1rem', padding:'1.5rem', boxShadow:'0 4px 24px 0 rgba(31,38,135,0.13)', border:'1px solid #222'}}>
+            <h3 style={{fontSize:'1.2rem', fontWeight:700, color:'#fff', marginBottom:'1.2rem'}}>Activity Trend (Last 30 Days)</h3>
+            <div style={{height:'260px'}}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="date" stroke="#9CA3AF" />
+                  <YAxis stroke="#9CA3AF" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
+                    itemStyle={{ color: '#E5E7EB' }}
+                  />
+                  <Line type="monotone" dataKey="tests" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div style={{background:'#23272f', borderRadius:'1rem', padding:'1.5rem', boxShadow:'0 4px 24px 0 rgba(31,38,135,0.13)', border:'1px solid #222', overflow:'hidden'}}>
+            <h3 style={{fontSize:'1.2rem', fontWeight:700, color:'#fff', marginBottom:'1.2rem'}}>Recent Activity</h3>
+            <div style={{overflowY:'auto', maxHeight:'220px', paddingRight:'0.5rem'}}>
+              <table style={{width:'100%', color:'#fff', fontSize:'0.98rem'}}>
+                <tbody>
+                  {recentActivity.map((result) => (
+                    <tr key={result._id}>
+                      <td style={{padding:'0.7rem 0.5rem'}}>
+                        <div style={{fontWeight:600}}>{result.userId?.name || 'Unknown User'}</div>
+                        <div style={{fontSize:'0.9em', color:'#b3b3b3'}}>{new Date(result.completedAt).toLocaleDateString()}</div>
+                      </td>
+                      <td style={{padding:'0.7rem 0.5rem', textAlign:'right'}}>
+                        <div style={{color:'#b3b3b3', fontSize:'0.97em', maxWidth:'120px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{result.quizId?.title || 'Unknown Quiz'}</div>
+                        <span style={{fontWeight:700, fontSize:'0.95em', padding:'0.2em 0.7em', borderRadius:'1em', background:result.score>=70?'#22c55e33':'#ef444433', color:result.score>=70?'#22c55e':'#ef4444', marginLeft:'0.5em'}}>{Math.round(result.score)}%</span>
+                      </td>
+                    </tr>
+                  ))}
+                  {recentActivity.length === 0 && (
+                    <tr>
+                      <td colSpan={2} style={{textAlign:'center', color:'#888', fontStyle:'italic', padding:'1.5rem 0'}}>No recent activity</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
