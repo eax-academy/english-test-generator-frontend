@@ -1,25 +1,3 @@
-export interface CreatedQuizData {
-  title: string;
-  text: string;
-  type: string;
-  difficulty: string;
-  questions: { question: string; options: string[]; answer: string }[];
-  userId: string;
-}
-
-export interface ReturnedQuizData {
-  _id: string;
-  title: string;
-  text: string;
-  type: string;
-  difficulty: string;
-  questions: { question: string; options: string[]; answer: string }[];
-  keywords: string[];
-  createdBy: string | User;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export type Question = {
   _id: string;
   type: string;
@@ -34,7 +12,6 @@ export type Quiz = {
   title: string;
   questions: Question[];
 };
-
 export interface User {
   _id: string;
   name: string;
@@ -42,29 +19,60 @@ export interface User {
   email: string;
   role?: string;
   quizCount?: number;
+  createdAt: string;
 }
-
+export interface CreatedQuizData {
+  title: string;
+  text: string;
+  type: string;
+  difficulty: string;
+  questions: { question: string; options: string[]; answer: string }[];
+  userId: string;
+}
+export interface ReturnedQuizData {
+  _id: string;
+  title: string;
+  text: string;
+  type: string;
+  difficulty: string;
+  questions: { question: string; options: string[]; answer: string }[];
+  keywords: string[];
+  createdBy: string | User;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Result {
+  _id: string;
+  score: number;
+  totalQuestions: number;
+  completedAt: string;
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  quizId: {
+    _id: string;
+    title: string;
+  };
+};
 export interface AuthResponse {
   user: User;
   token: string;
 }
-
 export interface LoginRequest {
   email: string;
   password: string;
 }
-
 export interface RegisterRequest {
   name: string;
   surname: string;
   email: string;
   password: string;
 }
-
 export interface ForgotPasswordRequest {
   email: string;
 }
-
 export interface ResetPasswordRequest {
   token: string;
   newPassword: string;

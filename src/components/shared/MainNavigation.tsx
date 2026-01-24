@@ -19,7 +19,7 @@ function MainNavigation() {
     return (
         <header className={classes.header}>
             <div className={classes.logo}>
-                <NavLink to="/">
+                <NavLink to="/home">
                     <img src={brainLogo} alt="Brain Logo" />
                 </NavLink>
                 <span>English Test Generator</span>

@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
-import { API } from "../config/api.config";
+import { QUIZ_API, RESULTS_API } from "../config/api.config";
 import { type Quiz } from "../types/types";
 import { useQuizContext } from "../hooks/useQuizContext";
 import { useTimer } from "../hooks/useTimer";
+import { useAuth } from "../store/AuthContext";
 
 
-export default function ResultsPage() {
+function ResultsPage() {
     const { quizId } = useParams();
     const { formatTime } = useTimer();
+    const { user } = useAuth();
     const {
         lastQuiz,
         lastScore,
@@ -21,13 +23,14 @@ export default function ResultsPage() {
     const [score] = useState<number>(lastScore || 0);
     const [loading, setLoading] = useState(!lastQuiz);
     const [showConfetti, setShowConfetti] = useState(false);
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         if (quiz || !quizId) return;
 
         let isMounted = true;
 
-        fetch(`${API}/${quizId}`)
+        fetch(`${QUIZ_API}/${quizId}`)
             .then(res => {
                 if (!res.ok) throw new Error("Quiz not found");
                 return res.json();
@@ -46,6 +49,49 @@ export default function ResultsPage() {
             isMounted = false;
         };
     }, [quizId, quiz]);
+
+
+    useEffect(() => {
+        if (!quiz || score === null || saved) return;
+
+        const saveResult = async () => {
+            try {
+                const response = await fetch(RESULTS_API, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    body: JSON.stringify({
+                        quizId: quiz._id, 
+                        score: Number(score),      
+                        elapsedTime: lastElapsedTime ?? 0,
+                        totalQuestions: quiz.questions.length,
+                        userId: user?._id || undefined,
+                        email: user?.email || undefined,
+                    }),
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        console.warn("Too many requests, try again later");
+                        return;
+                    }
+
+                    const errText = await response.text();
+                    throw new Error(errText || "Failed to save result");
+                }
+
+                const data = await response.json();
+                console.log("Result saved:", data);
+                setSaved(true);
+            } catch (err) {
+                console.error("Error saving result:", err);
+            }
+        };
+
+        saveResult();
+    }, [quiz, score, lastElapsedTime, saved, user]);
 
     // Show confetti if score >= 70%
     useEffect(() => {
@@ -114,7 +160,7 @@ export default function ResultsPage() {
                         Try Again
                     </button>
                     <button
-                        onClick={() => navigate("/")}
+                        onClick={() => navigate("/home")}
                         className="px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white font-bold rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 cursor-pointer"
                     >
                         Generate New Test
@@ -130,3 +176,5 @@ export default function ResultsPage() {
         </div>
     );
 }
+
+export default memo(ResultsPage);

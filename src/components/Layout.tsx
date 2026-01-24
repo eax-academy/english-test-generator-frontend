@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-import MainNavigation from "./MainNavigation";
-import Footer from "./Footer";
+import MainNavigation from "./shared/MainNavigation";
+import Footer from "./shared/Footer";
 
 export default function Layout() {
     return (

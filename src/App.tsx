@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Layouts
 import AdminLayout from "./components/AdminLayout";
-import Layout from "./components/shared/Layout";
+import Layout from "./components/Layout";
 
 // Public Pages
 import AboutPage from "./pages/AboutPage";
@@ -25,19 +25,12 @@ import AdminRoute from "./components/AdminRoute";
 import { QuizContextProvider } from "./store/QuizContext";
 import { AuthProvider } from "./store/AuthContext";
 
-
-// function AdminRoute({ children }: React.PropsWithChildren) {
-//   const token = localStorage.getItem("admin_token");
-//   return token ? children : <Navigate to="/login" replace />;
-// }
-
 function App() {
   return (
     <QuizContextProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-
             {/* ---------- PUBLIC SITE ---------- */}
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/home" replace />} />
@@ -46,19 +39,14 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password/:token" element={<ResetPasswordPage />} /> 
+              <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
               <Route path="/quiz/:quizId" element={<QuizPage />} />
               <Route path="/results/:quizId" element={<ResultsPage />} />
             </Route>
 
-
-
             {/* ---------- ADMIN PANEL ---------- */}
-
-            {/* Admin Login (Public) */}
             <Route path="/admin/login" element={<AdminLoginPage />} />
 
-            {/* Protected Admin Routes */}
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
@@ -67,10 +55,7 @@ function App() {
                 <Route path="results" element={<AdminResults />} />
               </Route>
             </Route>
-
-            {/* ---------- 404 ---------- */}
             <Route path="*" element={<div>404 Not Found</div>} />
-
           </Routes>
         </BrowserRouter>
       </AuthProvider>

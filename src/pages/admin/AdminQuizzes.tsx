@@ -9,7 +9,6 @@ function AdminQuizzes() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
-
   const [selectedQuiz, setSelectedQuiz] = useState<ReturnedQuizData | null>(null);
 
   useEffect(() => {

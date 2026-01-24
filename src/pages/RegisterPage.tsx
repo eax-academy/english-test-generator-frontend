@@ -37,8 +37,9 @@ function RegisterPage() {
                 password: formData.password,
             });
             navigate("/login");
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Registration failed. Please try again.");
+        } catch (err) {
+            const error = err as { response?: { data?: { message?: string } } };
+            setError(error.response?.data?.message || "Registration failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -113,7 +114,7 @@ function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative flex w-full justify-center rounded-[4px] bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                            className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
                         >
                             {loading ? "Creating account..." : "Sign Up"}
                         </button>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiLogin } from "../api/auth.api";
 import { useAuth } from "../store/AuthContext";
+import axios from "axios";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -20,18 +21,19 @@ function LoginPage() {
             const response = await apiLogin({ email, password });
             login(response.user, response.token);
             navigate("/home");
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Login failed. Please check your credentials.");
+        } catch (err) {
+            const error = axios.isAxiosError(err) ? err.response?.data?.message : "Login failed. Please check your credentials.";
+            setError(error || "Login failed. Please check your credentials.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
+        <div className="relative flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="z-10 w-full max-w-[450px] space-y-8 rounded-lg bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
                 <div>
-                    <h2 className="text-left text-3xl font-bold text-white">
+                    <h2 className="text-center text-3xl font-bold text-white">
                         Sign In
                     </h2>
                 </div>
@@ -71,7 +73,7 @@ function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative flex w-full justify-center rounded-[4px] bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                            className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
                         >
                             {loading ? "Signing in..." : "Sign In"}
                         </button>

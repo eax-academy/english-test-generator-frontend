@@ -17,8 +17,9 @@ function ForgotPasswordPage() {
         try {
             await apiForgotPassword({ email });
             setMessage("Check your email for the reset link.");
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to process request. Please try again.");
+        } catch (err: unknown) {
+            const error = err as { response?: { data?: { message?: string } } };
+            setError(error.response?.data?.message || "Failed to process request. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -66,7 +67,7 @@ function ForgotPasswordPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="group relative flex w-full justify-center rounded-[4px] bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                                className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
                             >
                                 {loading ? "Sending..." : "Send Reset Link"}
                             </button>

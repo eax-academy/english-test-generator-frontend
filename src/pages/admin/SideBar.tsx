@@ -18,7 +18,7 @@ function Sidebar() {
 
 
     return (
-        <aside className="fixed left-0 top-0 h-screen w-64 bg-black text-white p-6 border-r border-neutral-800">
+        <aside className="fixed left-0 top-0 h-screen w-50 bg-black text-white p-6 border-r border-neutral-800">
             <h2 className="text-xl font-bold text-red-600 mb-8 tracking-wide">
                 ADMIN PAGE
             </h2>

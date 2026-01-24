@@ -34,7 +34,6 @@ export default function HomePage() {
       console.log("Created quiz ID:", quiz._id);
       navigate(`/quiz/${quiz._id}`, { state: { quiz } });
 
-
     } catch (error) {
       console.error(error);
       alert("Failed to generate quiz. Check console.");
