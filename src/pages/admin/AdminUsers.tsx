@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAllUsers } from "../../api/users.api";
+import { fetchAllUsers, deleteUser } from "../../api/users.api";
 import type { User } from "../../types/types";
 
 
@@ -7,6 +7,18 @@ function AdminUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+
+  // Handle user delete
+  const handleDeleteUser = async (userId: string) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await deleteUser(userId);
+      setUsers((prev) => prev.filter((u) => u._id !== userId));
+    } catch {
+      alert("Failed to delete user");
+    }
+  };
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -94,11 +106,11 @@ function AdminUsers() {
                   </td>
 
                   <td className="px-6 py-4 flex justify-center gap-2">
-                    <button className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 rounded text-white">
-                      Change Role
-                    </button>
 
-                    <button className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 rounded text-white">
+                    <button
+                      className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 rounded text-white"
+                      onClick={() => handleDeleteUser(user._id)}
+                    >
                       Delete
                     </button>
                   </td>

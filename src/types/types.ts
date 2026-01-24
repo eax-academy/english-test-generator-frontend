@@ -12,7 +12,6 @@ export type Quiz = {
   title: string;
   questions: Question[];
 };
-
 export interface User {
   _id: string;
   name: string;
@@ -44,34 +43,36 @@ export interface ReturnedQuizData {
 }
 export interface Result {
   _id: string;
-  userId: User;
-  quizId: Quiz;
   score: number;
   totalQuestions: number;
   completedAt: string;
-}
-
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  quizId: {
+    _id: string;
+    title: string;
+  };
+};
 export interface AuthResponse {
   user: User;
   token: string;
 }
-
 export interface LoginRequest {
   email: string;
   password: string;
 }
-
 export interface RegisterRequest {
   name: string;
   surname: string;
   email: string;
   password: string;
 }
-
 export interface ForgotPasswordRequest {
   email: string;
 }
-
 export interface ResetPasswordRequest {
   token: string;
   newPassword: string;

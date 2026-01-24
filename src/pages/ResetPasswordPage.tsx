@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { AxiosError } from "axios";
 import { apiResetPassword } from "../api/auth.api";
 
 function ResetPasswordPage() {
@@ -34,8 +35,9 @@ function ResetPasswordPage() {
             setTimeout(() => {
                 navigate("/login");
             }, 3000);
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to reset password. Please try again.");
+        } catch (err: unknown) {
+            const error = err as AxiosError<{ message: string }>;
+            setError(error.response?.data?.message || "Failed to reset password. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -91,7 +93,7 @@ function ResetPasswordPage() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="group relative flex w-full justify-center rounded-[4px] bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                                className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
                             >
                                 {loading ? "Resetting..." : "Reset Password"}
                             </button>

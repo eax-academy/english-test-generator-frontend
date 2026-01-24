@@ -19,7 +19,7 @@ function AdminResults() {
         setLoading(false);
       }
     };
-    
+
     loadResults();
   }, []);
 
@@ -64,12 +64,9 @@ function AdminResults() {
               </tr>
             ) : (
               results.map((result: Result) => (
-                <tr
-                  key={result._id}
-                  className="hover:bg-gray-800 cursor-pointer transition-colors duration-300 text-center"
-                >
+                <tr key={result._id} className="hover:bg-gray-800 text-center">
                   <td className="px-6 py-4 font-medium text-white">
-                    {result.userId?.name || "—"}
+                    {result.userId?._id || "—"}
                   </td>
                   <td className="px-6 py-4 text-gray-300">
                     {result.userId?.email || "—"}
@@ -78,12 +75,10 @@ function AdminResults() {
                     {result.quizId?.title || "—"}
                   </td>
                   <td className="px-6 py-4 text-white">
-                    {result.score ?? 0} / {result.totalQuestions ?? "—"}
+                    {result.score} / {result.totalQuestions}
                   </td>
                   <td className="px-6 py-4 text-gray-400">
-                    {result.completedAt
-                      ? new Date(result.completedAt).toLocaleString()
-                      : "—"}
+                    {new Date(result.completedAt).toLocaleString()}
                   </td>
                 </tr>
               ))
