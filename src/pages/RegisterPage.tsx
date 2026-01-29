@@ -38,8 +38,8 @@ function RegisterPage() {
             });
             navigate("/login");
         } catch (err) {
-            const error = err as { response?: { data?: { message?: string } } };
-            setError(error.response?.data?.message || "Registration failed. Please try again.");
+            const error = err as { response?: { data?: { message?: string; error?: string } } };
+            setError(error.response?.data?.message || error.response?.data?.error || "Registration failed. Please try again.");
         } finally {
             setLoading(false);
         }
