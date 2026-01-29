@@ -31,7 +31,12 @@ export const apiResetPassword = async (data: ResetPasswordRequest): Promise<void
     await axios.post(`${AUTH_API}/reset-password/${data.token}`, { password: data.newPassword });
 };
 
-export const apiLogout = () => {
+export const apiLogout = async () => {
+    try {
+        await axios.post(`${AUTH_API}/logout`, {}, { headers: getAuthHeader() });
+    } catch (e) {
+        console.error("Logout failed", e);
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 };
