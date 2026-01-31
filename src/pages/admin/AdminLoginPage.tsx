@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiAdminLogin } from "../../api/auth.api";
-import { useAuth } from "../../store/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import styles from "./AdminLoginPage.module.css";
 
 function AdminLoginPage() {
@@ -45,7 +45,7 @@ function AdminLoginPage() {
             <div className={styles.adminLoginBox}>
                 <div>
                     <h2 className={styles.adminLoginTitle}>Admin Portal</h2>
-                    <p className={styles.adminLoginSubtitle}>Authorized personnel only</p>
+                    <p className={styles.adminLoginSubtitle}>Authorized persons only</p>
                 </div>
                 <form className={styles.adminLoginForm} onSubmit={handleSubmit}>
                     <div>

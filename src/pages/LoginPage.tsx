@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiLogin } from "../api/auth.api";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import styles from "./LoginPage.module.css";
 

@@ -5,7 +5,7 @@ import classes from './MainNavigation.module.css';
 
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../store/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 function MainNavigation() {
     const { isAuthenticated, logout } = useAuth();

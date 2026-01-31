@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import type { User } from "../types/types";
 import { apiLogout } from "../api/auth.api";
 
@@ -24,8 +24,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Check for invalid "undefined" string which might have been stored by bug
         if (storedUser && storedToken && storedToken !== "undefined") {
             try {
-                setUser(JSON.parse(storedUser));
-                setIsAuthenticated(true);
+                const parsedUser = JSON.parse(storedUser);
+                queueMicrotask(() => {
+                    setUser(parsedUser);
+                    setIsAuthenticated(true);
+                });
             } catch (error) {
                 console.error("Failed to parse stored user", error);
                 localStorage.removeItem("user");
@@ -36,7 +39,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             localStorage.removeItem("user");
             localStorage.removeItem("token");
         }
-        setLoading(false);
+
+        queueMicrotask(() => setLoading(false));
     }, []);
 
     const login = (userData: User, token: string) => {
@@ -59,10 +63,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};
+export { AuthContext }; 
