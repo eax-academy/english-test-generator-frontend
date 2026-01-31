@@ -6,7 +6,7 @@ type AuthContextType = {
     user: User | null;
     isAuthenticated: boolean;
     login: (user: User, token: string) => void;
-    logout: () => void;
+    logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(true);
     };
 
-    const logout = () => {
-        apiLogout();
+    const logout = async () => {
+        await apiLogout();
         setUser(null);
         setIsAuthenticated(false);
     };

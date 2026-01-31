@@ -20,6 +20,8 @@ import AdminQuizzes from "./pages/admin/AdminQuizzes";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminResults from "./pages/admin/AdminResults";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminSubmissions from "./pages/admin/AdminSubmissions";
+import AdminSubmissionEdit from "./pages/admin/AdminSubmissionEdit";
 import AdminRoute from "./components/AdminRoute";
 
 import { QuizContextProvider } from "./store/QuizContext";
@@ -53,6 +55,8 @@ function App() {
                 <Route path="quizzes" element={<AdminQuizzes />} />
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="results" element={<AdminResults />} />
+                <Route path="submissions" element={<AdminSubmissions />} />
+                <Route path="submissions/:id" element={<AdminSubmissionEdit />} />
               </Route>
             </Route>
             <Route path="*" element={<div>404 Not Found</div>} />

@@ -5,14 +5,12 @@ function Sidebar() {
     const navigate = useNavigate();
     const { logout } = useAuth();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         const confirmed = window.confirm("Are you sure you want to logout?");
 
         if (confirmed) {
+            await logout();
             navigate("/home");
-            setTimeout(() => {
-                logout();
-            }, 50);
         }
     };
 
