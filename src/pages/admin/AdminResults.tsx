@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import styles from "./AdminPage.module.css";
 import { fetchAllResults } from "../../api/results.api";
 import type { Result } from "../../types/types";
+import styles from "./AdminPage.module.css";
 
 function AdminResults() {
   const [results, setResults] = useState<Result[]>([]);
