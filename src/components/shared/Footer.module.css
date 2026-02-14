@@ -47,8 +47,7 @@ span {
 
 /* Small Screens */
 @media (max-width: 500px) {
-    .links {
-        flex-direction: column;
-        gap: 0.8rem;
+    .footer {
+        display: none;
     }
 }
