@@ -5,7 +5,7 @@ import classes from './MainNavigation.module.css';
 
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../store/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 function MainNavigation() {
     const { isAuthenticated, logout } = useAuth();
@@ -62,9 +62,15 @@ function MainNavigation() {
                     </li>
                     <li>
                         {isAuthenticated ? (
-                            <button onClick={handleLogout} className={classes.logoutBtn}>
+                            <NavLink
+                                to="/login"
+                                onClick={handleLogout}
+                                className={({ isActive }) =>
+                                    isActive ? classes.active : undefined
+                                }
+                            >
                                 Logout
-                            </button>
+                            </NavLink>  
                         ) : (
                             <NavLink
                                 to="/login"

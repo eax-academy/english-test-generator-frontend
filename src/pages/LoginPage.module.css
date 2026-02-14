@@ -1,0 +1,124 @@
+.loginContainer {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.loginBox {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(0,0,0,0.75);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2.5rem 2rem;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.loginTitle {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.loginInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #23272f;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+}
+
+.loginInput:focus {
+  border: 1.5px solid #e50914;
+  background: #23272f;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: #e50914;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.loginButton:hover:not(:disabled) {
+  background: #b81d24;
+}
+
+.loginButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loginError {
+  color: #ff4d4d;
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #b3b3b3;
+  font-size: 0.95rem;
+}
+
+.loginRemember {
+  display: flex;
+  align-items: center;
+}
+
+.loginRemember input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.loginFooter {
+  margin-top: 2rem;
+  color: #737373;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.loginFooter a {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .loginBox {
+    padding: 1.5rem 0.5rem;
+    max-width: 95vw;
+  }
+  .loginTitle {
+    font-size: 1.5rem;
+  }
+}

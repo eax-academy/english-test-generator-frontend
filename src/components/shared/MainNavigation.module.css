@@ -77,8 +77,16 @@ img {
 
 /* Optional: make header shrink on small screens */
 @media (max-width: 600px) {
+  .logo img {
+    width: 30px;
+  }
+
+  .logo span {
+    display: none;
+  }
+
   .links {
-    gap: 1rem;
+    gap: .5rem;
   }
 
   .links a {

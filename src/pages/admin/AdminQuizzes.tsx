@@ -1,8 +1,10 @@
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { QUIZ_API, ADMIN_QUIZZES_API } from "../../config/api.config";
 import { getAuthHeader } from "../../api/auth.api";
 import type { ReturnedQuizData, User } from "../../types/types";
+import styles from "./AdminPage.module.css";
 
 function AdminQuizzes() {
   const [quizzes, setQuizzes] = useState<ReturnedQuizData[]>([]);
@@ -49,10 +51,10 @@ function AdminQuizzes() {
     return matchesSearch && matchesDifficulty;
   });
 
-  if (loading) return <div className="text-white p-8 animate-pulse">Loading quizzes...</div>;
+  if (loading) return <div className={styles.adminPageContainer}>Loading quizzes...</div>;
 
   return (
-    <div className="space-y-6 animate-fade-in relative">
+    <div className={styles.adminPageContainer}>
       {/* MODAL */}
       {selectedQuiz && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
@@ -108,32 +110,25 @@ function AdminQuizzes() {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-3xl font-bold text-white">All Quizzes</h2>
-        <div className="text-sm text-gray-400">
-          Showing <span className="text-white font-bold">{filteredQuizzes.length}</span> of {quizzes.length} quizzes
+      <div className={styles.adminPageSection}>
+        <h2 className={styles.adminPageTitle}>All Quizzes</h2>
+        <div className="text-sm text-gray-400" style={{textAlign: 'center', marginBottom: '1.5rem'}}>
+          Showing <span style={{color: '#fff', fontWeight: 700}}>{filteredQuizzes.length}</span> of {quizzes.length} quizzes
         </div>
-      </div>
 
       {/* FILTERS TOOLBAR */}
-      <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-700 flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search by title or creator..."
-            className="w-full bg-gray-900/50 text-white rounded-lg pl-10 pr-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 transition-all"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
+      <div style={{display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem'}}>
+        <input
+          type="text"
+          placeholder="Search by title or creator..."
+          style={{flex: 1, minWidth: 200, padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff'}}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <select
           value={difficultyFilter}
           onChange={(e) => setDifficultyFilter(e.target.value)}
-          className="bg-gray-900/50 text-white rounded-lg px-4 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          style={{padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff'}}
         >
           <option value="all">All Difficulties</option>
           <option value="basic">Basic</option>
@@ -143,84 +138,39 @@ function AdminQuizzes() {
       </div>
 
       {/* QUIZ LIST */}
-      <div className="overflow-hidden rounded-xl border border-gray-700 shadow-xl bg-gray-800">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-700">
-            <thead className="bg-gray-900/80">
-              <tr>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Title</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Difficulty</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Created By</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
-                <th scope="col" className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700 bg-gray-800/50">
+      <div className={styles.adminPageSection}>
+        <table className={styles.adminTable}>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Difficulty</th>
+              <th>Created By</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
               {filteredQuizzes.length > 0 ? (
                 filteredQuizzes.map((quiz) => {
                   const creator = typeof quiz.createdBy === 'object' ? (quiz.createdBy as User) : null;
 
                   return (
-                    <tr key={quiz._id} className="group hover:bg-gray-700/50 transition-colors duration-150">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-white max-w-[300px] truncate" title={quiz.title}>
-                          {quiz.title}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${quiz.difficulty === 'advanced' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                          quiz.difficulty === 'intermediate' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                            'bg-green-500/10 text-green-400 border-green-500/20'
-                          }`}>
-                          {quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {creator ? (
-                          <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center text-xs text-white uppercase">
-                              {creator.name.charAt(0)}
-                            </div>
-                            {creator.name} {creator.surname}
-                          </div>
-                        ) : (
-                          <span className="text-gray-500 italic">Unknown</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                        {new Date(quiz.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => setSelectedQuiz(quiz)}
-                            className="text-gray-400 hover:text-blue-400 transition-colors p-2 rounded-lg hover:bg-blue-500/10"
-                            title="View Full Details"
-                          >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => handleDelete(quiz._id)}
-                            className="text-gray-400 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-500/10"
-                            title="Delete Quiz"
-                          >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        </div>
+                    <tr key={quiz._id}>
+                      <td title={quiz.title}>{quiz.title}</td>
+                      <td>{quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}</td>
+                      <td>{creator ? `${creator.name} ${creator.surname}` : <span style={{color:'#888'}}>Unknown</span>}</td>
+                      <td>{new Date(quiz.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <button onClick={() => setSelectedQuiz(quiz)} className={styles.adminActionButton} title="View Full Details">View</button>
+                        <button onClick={() => handleDelete(quiz._id)} className={styles.adminActionButton} title="Delete Quiz">Delete</button>
                       </td>
                     </tr>
                   );
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                    <p className="text-lg">No quizzes found.</p>
-                    <p className="text-sm">Try adjusting your search or filters.</p>
+                  <td colSpan={5} style={{textAlign:'center', color:'#888', padding:'2rem 0'}}>
+                    <div>No quizzes found.<br/>Try adjusting your search or filters.</div>
                   </td>
                 </tr>
               )}
