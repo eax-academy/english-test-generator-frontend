@@ -68,6 +68,7 @@ export default function HomePage() {
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value as "basic" | "intermediate" | "advanced")}
           className={styles.homeSelect}
+          disabled={true} // TODO: Temporarily disable difficulty selection until implemented in backend
         >
           <option value="basic">Basic</option>
           <option value="intermediate">Intermediate</option>
