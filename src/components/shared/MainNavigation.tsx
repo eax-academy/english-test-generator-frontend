@@ -27,7 +27,7 @@ function MainNavigation() {
 
             <nav>
                 <ul className={classes.links}>
-                    <li>
+                    {/* <li>
                         <NavLink
                             to="/admin"
                             className={({ isActive }) =>
@@ -37,7 +37,7 @@ function MainNavigation() {
                         >
                             Admin
                         </NavLink>
-                    </li>
+                    </li> */}
 
                     <li>
                         <NavLink
