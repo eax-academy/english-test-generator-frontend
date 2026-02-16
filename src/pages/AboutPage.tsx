@@ -1,13 +1,15 @@
 
 import { useNavigate } from "react-router-dom";
 import styles from "./AboutPage.module.css";
+import { useAuth } from "../hooks/useAuth";
 
 function AboutPage() {
+    const {user} = useAuth();
     const navigate = useNavigate();
 
     return (
         <div className={styles.aboutContainer}>
-            <h1 className={styles.aboutTitle}>Welcome dear guest!</h1>
+            <h1 className={styles.aboutTitle}>Welcome dear {user?.name || "guest"} !</h1>
             <p className={styles.aboutSubtitle}>
                 Challenge yourself, learn new things, and see how you stack up against the world.
                 Your ultimate destination for fun, interactive quizzes.
