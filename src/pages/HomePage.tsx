@@ -38,7 +38,7 @@ export default function HomePage() {
 
     } catch (error) {
       console.error(error);
-      alert("Failed to generate quiz. Check console.");
+      alert("Failed to generate quiz. Please sign in and try again.");
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function HomePage() {
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value as "basic" | "intermediate" | "advanced")}
           className={styles.homeSelect}
-          disabled={true} // TODO: Temporarily disable difficulty selection until implemented in backend
+          disabled     // TODO: Temporarily disable difficulty selection until implemented in backend
         >
           <option value="basic">Basic</option>
           <option value="intermediate">Intermediate</option>

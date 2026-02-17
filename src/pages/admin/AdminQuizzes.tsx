@@ -112,70 +112,72 @@ function AdminQuizzes() {
 
       <div className={styles.adminPageSection}>
         <h2 className={styles.adminPageTitle}>All Quizzes</h2>
-        <div className="text-sm text-gray-400" style={{textAlign: 'center', marginBottom: '1.5rem'}}>
-          Showing <span style={{color: '#fff', fontWeight: 700}}>{filteredQuizzes.length}</span> of {quizzes.length} quizzes
+        <div className="text-sm text-gray-400" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          Showing <span style={{ color: '#fff', fontWeight: 700 }}>{filteredQuizzes.length}</span> of {quizzes.length} quizzes
         </div>
 
-      {/* FILTERS TOOLBAR */}
-      <div style={{display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem'}}>
-        <input
-          type="text"
-          placeholder="Search by title or creator..."
-          style={{flex: 1, minWidth: 200, padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff'}}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          value={difficultyFilter}
-          onChange={(e) => setDifficultyFilter(e.target.value)}
-          style={{padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff'}}
-        >
-          <option value="all">All Difficulties</option>
-          <option value="basic">Basic</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
-      </div>
+        {/* FILTERS TOOLBAR */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+          <input
+            type="text"
+            placeholder="Search by title or creator..."
+            style={{ flex: 1, minWidth: 200, padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff' }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            value={difficultyFilter}
+            onChange={(e) => setDifficultyFilter(e.target.value)}
+            style={{ padding: '0.7rem 1rem', borderRadius: '0.5rem', border: '1px solid #444', background: '#18181b', color: '#fff' }}
+          >
+            <option value="all">All Difficulties</option>
+            <option value="basic">Basic</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
 
-      {/* QUIZ LIST */}
-      <div className={styles.adminPageSection}>
-        <table className={styles.adminTable}>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Difficulty</th>
-              <th>Created By</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-              {filteredQuizzes.length > 0 ? (
-                filteredQuizzes.map((quiz) => {
-                  const creator = typeof quiz.createdBy === 'object' ? (quiz.createdBy as User) : null;
-
-                  return (
-                    <tr key={quiz._id}>
-                      <td title={quiz.title}>{quiz.title}</td>
-                      <td>{quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}</td>
-                      <td>{creator ? `${creator.name} ${creator.surname}` : <span style={{color:'#888'}}>Unknown</span>}</td>
-                      <td>{new Date(quiz.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <button onClick={() => setSelectedQuiz(quiz)} className={styles.adminActionButton} title="View Full Details">View</button>
-                        <button onClick={() => handleDelete(quiz._id)} className={styles.adminActionButton} title="Delete Quiz">Delete</button>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
+        {/* QUIZ LIST */}
+        <div className={styles.adminPageSection}>
+          <div style={{ overflowX: "auto", width: "100%", WebkitOverflowScrolling: "touch" }}>
+            <table className={styles.adminTable}>
+              <thead>
                 <tr>
-                  <td colSpan={5} style={{textAlign:'center', color:'#888', padding:'2rem 0'}}>
-                    <div>No quizzes found.<br/>Try adjusting your search or filters.</div>
-                  </td>
+                  <th>Title</th>
+                  <th>Difficulty</th>
+                  <th>Created By</th>
+                  <th>Date</th>
+                  <th>Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredQuizzes.length > 0 ? (
+                  filteredQuizzes.map((quiz) => {
+                    const creator = typeof quiz.createdBy === 'object' ? (quiz.createdBy as User) : null;
+
+                    return (
+                      <tr key={quiz._id}>
+                        <td title={quiz.title}>{quiz.title}</td>
+                        <td>{quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1)}</td>
+                        <td>{creator ? `${creator.name} ${creator.surname}` : <span style={{ color: '#888' }}>Unknown</span>}</td>
+                        <td>{new Date(quiz.createdAt).toLocaleDateString()}</td>
+                        <td>
+                          <button onClick={() => setSelectedQuiz(quiz)} className={styles.adminActionButton} title="View Full Details">View</button>
+                          <button onClick={() => handleDelete(quiz._id)} className={styles.adminActionButton} title="Delete Quiz">Delete</button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={5} style={{ textAlign: 'center', color: '#888', padding: '2rem 0' }}>
+                      <div>No quizzes found.<br />Try adjusting your search or filters.</div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
