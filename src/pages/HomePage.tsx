@@ -8,6 +8,7 @@ import styles from "./HomePage.module.css";
 export default function HomePage() {
   const [text, setText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [difficulty, setDifficulty] = useState<"basic" | "intermediate" | "advanced">("basic");
 
@@ -17,7 +18,7 @@ export default function HomePage() {
     e.preventDefault();
 
     if (!text.trim() || !title.trim()) {
-      alert("Please enter both title and text.");
+      setError("Please enter both title and text.");
       return;
     }
 
@@ -30,7 +31,7 @@ export default function HomePage() {
         type: "mixed",
         difficulty,
         questions: [],
-        userId: "temp-user",
+        userId: "", 
       });
 
       console.log("Created quiz ID:", quiz._id);
@@ -38,7 +39,7 @@ export default function HomePage() {
 
     } catch (error) {
       console.error(error);
-      alert("Failed to generate quiz. Please sign in and try again.");
+      setError("Failed to generate quiz. Please sign in and try again.");
     } finally {
       setLoading(false);
     }
@@ -74,6 +75,8 @@ export default function HomePage() {
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
         </select>
+
+        {error && <p className={styles.homeError}>{error}</p>}
         <button
           type="submit"
           disabled={loading}
