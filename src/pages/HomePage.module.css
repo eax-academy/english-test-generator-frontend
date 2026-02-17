@@ -12,10 +12,10 @@
 .homeFormBox {
   width: 100%;
   max-width: 600px;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
   border-radius: 1.25rem;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2.5rem 2rem;
   backdrop-filter: blur(8px);
   display: flex;
@@ -57,7 +57,7 @@
   border: none;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
-  box-shadow: 0 4px 16px 0 rgba(229,9,20,0.15);
+  box-shadow: 0 4px 16px 0 rgba(229, 9, 20, 0.15);
 }
 
 .homeButton:hover:not(:disabled) {
@@ -68,6 +68,12 @@
 .homeButton:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.homeError {
+  color: #ff4d4f;
+  font-size: 0.9rem;
+  margin-top: -0.8rem;
 }
 
 @media (max-width: 700px) {
