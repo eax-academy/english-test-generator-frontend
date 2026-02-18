@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../config/api.config";
-import { getAuthHeader } from "../../api/auth.api";
 
 interface Submission {
     _id: string;
@@ -25,10 +24,10 @@ const AdminSubmissions = () => {
 
     const fetchSubmissions = async () => {
         try {
-            const res = await axios.get(`${BASE_URL}/admin/submissions`, { headers: getAuthHeader() });
+            const res = await axios.get(`${BASE_URL}/admin/submissions`, { withCredentials: true });
             setSubmissions(res.data);
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to fetch submissions");
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Failed to fetch submissions");
         } finally {
             setLoading(false);
         }
@@ -37,10 +36,10 @@ const AdminSubmissions = () => {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this submission?")) return;
         try {
-            await axios.delete(`${BASE_URL}/admin/submissions/${id}`, { headers: getAuthHeader() });
+            await axios.delete(`${BASE_URL}/admin/submissions/${id}`, { withCredentials: true });
             setSubmissions((prev) => prev.filter((sub) => sub._id !== id));
-        } catch (err: any) {
-            alert(err.response?.data?.message || "Failed to delete submission");
+        } catch (err: unknown) {
+            alert(err instanceof Error ? err.message : "Failed to delete submission");
         }
     };
 

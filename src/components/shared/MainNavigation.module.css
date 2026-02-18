@@ -75,6 +75,16 @@ img {
   /* change cursor */
 }
 
+.logoutButton {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+
 /* Optional: make header shrink on small screens */
 @media (max-width: 600px) {
   .logo img {

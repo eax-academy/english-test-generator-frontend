@@ -60,7 +60,6 @@ function ResultsPage() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                     body: JSON.stringify({
                         quizId: quiz._id,
@@ -70,6 +69,7 @@ function ResultsPage() {
                         userId: user?._id || undefined,
                         email: user?.email || undefined,
                     }),
+                    credentials: "include",
                 });
 
                 if (!response.ok) {

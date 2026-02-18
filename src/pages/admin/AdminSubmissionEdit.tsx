@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../config/api.config";
-import { getAuthHeader } from "../../api/auth.api";
 
 const AdminSubmissionEdit = () => {
     const { id } = useParams();
@@ -14,10 +13,10 @@ const AdminSubmissionEdit = () => {
     useEffect(() => {
         const fetchSubmission = async () => {
             try {
-                const res = await axios.get(`${BASE_URL}/admin/submissions/${id}`, { headers: getAuthHeader() });
+                const res = await axios.get(`${BASE_URL}/admin/submissions/${id}`, { withCredentials: true });
                 setText(res.data.raw_text);
-            } catch (err: any) {
-                setError(err.response?.data?.message || "Failed to fetch submission");
+            } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : "Failed to fetch submission");
             } finally {
                 setLoading(false);
             }
@@ -27,11 +26,11 @@ const AdminSubmissionEdit = () => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`${BASE_URL}/admin/submissions/${id}`, { raw_text: text }, { headers: getAuthHeader() });
+            await axios.put(`${BASE_URL}/admin/submissions/${id}`, { raw_text: text }, { withCredentials: true });
             alert("Submission updated successfully!");
             navigate("/admin/submissions");
-        } catch (err: any) {
-            alert(err.response?.data?.message || "Failed to update submission");
+        } catch (err: unknown) {
+            alert(err instanceof Error ? err.message : "Failed to update submission");
         }
     };
 
@@ -40,8 +39,8 @@ const AdminSubmissionEdit = () => {
 
     return (
         <div className="p-8 text-white w-full max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-red-500">Edit Submission</h1>
-            <div className="bg-neutral-900 p-6 rounded-lg">
+            <h1 className="text-3xl font-bold mb-6 text-center text-red-500">Edit Submission</h1>
+            <div className="bg-neutral-900 p-6 rounded-lg shadow-lg">
                 <label className="block mb-2 text-gray-400">Submission Text</label>
                 <textarea
                     className="w-full h-64 p-4 bg-neutral-800 text-white rounded border border-neutral-700 focus:border-red-500 outline-none resize-none"
