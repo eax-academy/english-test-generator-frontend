@@ -19,18 +19,18 @@ function Sidebar() {
         <>
             <button
                 onClick={() => setIsOpen(true)}
-                className=" lg:hidden fixed top-4 left-4 z-50 text-white bg-black p-2 rounded"
+                className=" xl:hidden fixed top-4 left-4 z-50 text-white bg-black p-2 rounded font-size-xl hover:bg-red-600 transition-colors duration-500 cursor-pointer"
             >
                 ☰
             </button>
 
             <div
                 className={`
-                    fixed inset-0 bg-black/30 backdrop-blur-sm
-                    z-40 md:hidden
-                    transition-opacity duration-500
-                    ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}
-                `}
+                fixed inset-0 bg-black/20 backdrop-blur-sm
+                z-40 md:hidden
+                transition-opacity duration-500
+                ${isOpen ? "opacity-80" : "opacity-0 pointer-events-none"}
+            `}
                 onClick={() => setIsOpen(false)}
             />
 
@@ -40,7 +40,7 @@ function Sidebar() {
                     border-r border-neutral-800 z-50
                     transform transition-transform duration-300
                     ${isOpen ? "translate-x-0" : "-translate-x-full"}
-                    lg:translate-x-0
+                    xl:translate-x-0
                 `}
             >
                 <h2 className="text-xl font-bold text-red-600 mb-8 tracking-wide">

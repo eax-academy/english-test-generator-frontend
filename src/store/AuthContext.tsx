@@ -1,66 +1,78 @@
 import { createContext, useState, useEffect } from "react";
+import axios from "axios";
 import type { User } from "../types/types";
 import { apiLogout } from "../api/auth.api";
+import { AUTH_API } from "../config/api.config";
 
 type AuthContextType = {
     user: User | null;
     isAuthenticated: boolean;
-    login: (user: User, token: string) => void;
+    loading: boolean;
+    login: (userData: User) => void;
     logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+type AuthProviderProps = { children: React.ReactNode };
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true); // To prevent flash of wrong UI
+    const [loading, setLoading] = useState(true);
 
+    // Initialize auth on app mount
     useEffect(() => {
-        // Initialize auth state from localStorage on mount
-        const storedUser = localStorage.getItem("user");
-        const storedToken = localStorage.getItem("token");
-
-        // Check for invalid "undefined" string which might have been stored by bug
-        if (storedUser && storedToken && storedToken !== "undefined") {
+        const initAuth = async () => {
             try {
-                const parsedUser = JSON.parse(storedUser);
-                queueMicrotask(() => {
-                    setUser(parsedUser);
-                    setIsAuthenticated(true);
+                const res = await axios.get(`${AUTH_API}/refresh`, {
+                    withCredentials: true,
                 });
-            } catch (error) {
-                console.error("Failed to parse stored user", error);
-                localStorage.removeItem("user");
-                localStorage.removeItem("token");
-            }
-        } else {
-            // Invalid state, clear everything
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-        }
 
-        queueMicrotask(() => setLoading(false));
+                if (res.data?.user) {
+                    setUser(res.data.user);
+                    setIsAuthenticated(true);
+                } else {
+                    setUser(null);
+                    setIsAuthenticated(false);
+                }
+            } catch (err) {
+                console.error("Auth initialization failed:", err);
+                setUser(null);
+                setIsAuthenticated(false);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initAuth();
     }, []);
 
-    const login = (userData: User, token: string) => {
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", token);
+
+    const login = (userData: User) => {
         setUser(userData);
         setIsAuthenticated(true);
     };
 
     const logout = async () => {
-        await apiLogout();
-        setUser(null);
-        setIsAuthenticated(false);
+        try {
+            await apiLogout();
+        } catch (err) {
+            console.error("Logout failed:", err);
+        } finally {
+            setUser(null);
+            setIsAuthenticated(false);
+            window.location.reload();
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+        <AuthContext.Provider
+            value={{ user, isAuthenticated, login, logout, loading }}
+        >
             {!loading && children}
         </AuthContext.Provider>
     );
 };
 
-export { AuthContext }; 
+export { AuthContext };

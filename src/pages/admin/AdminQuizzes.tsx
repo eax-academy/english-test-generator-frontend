@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { QUIZ_API, ADMIN_QUIZZES_API } from "../../config/api.config";
-import { getAuthHeader } from "../../api/auth.api";
 import type { ReturnedQuizData, User } from "../../types/types";
 import styles from "./AdminPage.module.css";
 
@@ -19,7 +18,7 @@ function AdminQuizzes() {
 
   const fetchQuizzes = async () => {
     try {
-      const res = await axios.get(QUIZ_API, { headers: getAuthHeader() });
+      const res = await axios.get(QUIZ_API, { withCredentials: true });
       setQuizzes(res.data);
     } catch (error) {
       console.error("Failed to fetch quizzes", error);
@@ -32,7 +31,7 @@ function AdminQuizzes() {
     if (!window.confirm("Are you sure you want to delete this quiz? This action cannot be undone.")) return;
 
     try {
-      await axios.delete(`${ADMIN_QUIZZES_API}/${id}`, { headers: getAuthHeader() });
+      await axios.delete(`${ADMIN_QUIZZES_API}/${id}`, { withCredentials: true });
       setQuizzes(prev => prev.filter(q => q._id !== id));
     } catch (error) {
       console.error("Failed to delete quiz", error);
