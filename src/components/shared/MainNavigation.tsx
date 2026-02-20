@@ -5,16 +5,18 @@ import classes from './MainNavigation.module.css';
 
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../store/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 function MainNavigation() {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, loading } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
+
+    if (loading) return null;
 
     return (
         <header className={classes.header}>
@@ -27,18 +29,6 @@ function MainNavigation() {
 
             <nav>
                 <ul className={classes.links}>
-                    <li>
-                        <NavLink
-                            to="/admin"
-                            className={({ isActive }) =>
-                                isActive ? classes.active : undefined
-                            }
-                            end
-                        >
-                            Admin
-                        </NavLink>
-                    </li>
-
                     <li>
                         <NavLink
                             to="/about"
@@ -62,7 +52,10 @@ function MainNavigation() {
                     </li>
                     <li>
                         {isAuthenticated ? (
-                            <button onClick={handleLogout} className={classes.logoutBtn}>
+                            <button
+                                onClick={handleLogout}
+                                className={classes.logoutButton}
+                            >
                                 Logout
                             </button>
                         ) : (

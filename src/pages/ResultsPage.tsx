@@ -5,7 +5,7 @@ import { QUIZ_API, RESULTS_API } from "../config/api.config";
 import { type Quiz } from "../types/types";
 import { useQuizContext } from "../hooks/useQuizContext";
 import { useTimer } from "../hooks/useTimer";
-import { useAuth } from "../store/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 
 function ResultsPage() {
@@ -60,16 +60,16 @@ function ResultsPage() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                     body: JSON.stringify({
-                        quizId: quiz._id, 
-                        score: Number(score),      
+                        quizId: quiz._id,
+                        score: Number(score),
                         elapsedTime: lastElapsedTime ?? 0,
                         totalQuestions: quiz.questions.length,
                         userId: user?._id || undefined,
                         email: user?.email || undefined,
                     }),
+                    credentials: "include",
                 });
 
                 if (!response.ok) {

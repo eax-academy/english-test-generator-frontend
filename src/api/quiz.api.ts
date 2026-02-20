@@ -1,14 +1,13 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
 import { QUIZ_API } from "../config/api.config";
-import { getAuthHeader } from "./auth.api";
 import type { CreatedQuizData, ReturnedQuizData } from "../types/types";
 
 export const createQuiz = async (data: CreatedQuizData): Promise<ReturnedQuizData> => {
   try {
     const res: AxiosResponse<{ quiz: ReturnedQuizData; stats: unknown }> =
       await axios.post(QUIZ_API, data, {
-        headers: getAuthHeader(),
+        withCredentials: true,
       });
 
     if (!res.data.quiz) {

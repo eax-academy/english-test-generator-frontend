@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { USERS_API, QUIZ_API, RESULTS_API, BASE_URL } from "../../config/api.config";
-import { getAuthHeader } from "../../api/auth.api";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Result {
@@ -38,10 +36,10 @@ function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const [usersRes, quizzesRes, resultsRes, submissionsRes] = await Promise.all([
-          axios.get(USERS_API, { headers: getAuthHeader() }),
-          axios.get(QUIZ_API, { headers: getAuthHeader() }),
-          axios.get(RESULTS_API, { headers: getAuthHeader() }),
-          axios.get(`${BASE_URL}/admin/submissions`, { headers: getAuthHeader() })
+          axios.get(USERS_API, { withCredentials: true }),
+          axios.get(QUIZ_API, { withCredentials: true }),
+          axios.get(RESULTS_API, { withCredentials: true }),
+          axios.get(`${BASE_URL}/admin/submissions`, { withCredentials: true })
         ]);
 
         const results: Result[] = resultsRes.data;
@@ -59,7 +57,7 @@ function AdminDashboard() {
           return d.toISOString().split('T')[0];
         }).reverse();
 
-        const activityMap = results.reduce((acc: any, curr) => {
+        const activityMap = results.reduce((acc: Record<string, number>, curr) => {
           const date = curr.completedAt.split('T')[0];
           acc[date] = (acc[date] || 0) + 1;
           return acc;
@@ -91,81 +89,77 @@ function AdminDashboard() {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="text-white p-8">Loading stats...</div>;
+  if (loading) return <div className="p-8 text-white animate-pulse">Loading stats...</div>;
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <h2 className="text-3xl font-bold text-white mb-8">Dashboard Overview</h2>
-
-      {/* KPI GRID */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Link to="/admin/submissions">
-          <KpiCard title="Submissions" value={stats.submissions} icon="edit" color="red" />
-        </Link>
-        <KpiCard title="Total Users" value={stats.users} icon="users" color="blue" />
-        <KpiCard title="Total Quizzes" value={stats.quizzes} icon="book" color="green" />
-        <KpiCard title="Tests Taken" value={stats.totalTests} icon="clipboard" color="purple" />
-        <KpiCard title="Avg. Score" value={`${stats.avgScore}%`} icon="chart" color="yellow" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* CHART SECTION */}
-        <div className="lg:col-span-2 bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
-          <h3 className="text-xl font-semibold text-white mb-6">Activity Trend (Last 30 Days)</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="date" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
-                <Tooltip
-                  contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
-                  itemStyle={{ color: '#E5E7EB' }}
-                />
-                <Line type="monotone" dataKey="tests" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+    <div className="min-h-screen w-full flex flex-row bg-[#23272f] rounded-2xl animate-fade-in-open">
+      <main className="flex-1 p-6 md:p-10 flex flex-col gap-8 animate-fade-in-open">
+        <h2 className="text-xl font-extrabold text-center text-red-600 mb-8 animate-slideDown-open">Dashboard Overview</h2>
+        {/* KPI GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-open">
+          <Link to="/admin/submissions">
+            <KpiCard title="Submissions" value={stats.submissions} icon="edit" color="red" />
+          </Link>
+          <KpiCard title="Total Users" value={stats.users} icon="users" color="blue" />
+          <KpiCard title="Total Quizzes" value={stats.quizzes} icon="book" color="green" />
+          <KpiCard title="Tests Taken" value={stats.totalTests} icon="clipboard" color="purple" />
+          <KpiCard title="Avg. Score" value={`${stats.avgScore}%`} icon="chart" color="yellow" />
         </div>
 
-        {/* RECENT ACTIVITY TABLE */}
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg overflow-hidden">
-          <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
-          <div className="overflow-y-auto max-h-64 pr-2">
-            <table className="w-full text-left">
-              <tbody className="divide-y divide-gray-700">
-                {recentActivity.map((result) => (
-                  <tr key={result._id} className="group hover:bg-gray-700/50 transition-colors">
-                    <td className="py-3">
-                      <p className="text-sm font-medium text-white">{result.userId?.name || 'Unknown User'}</p>
-                      <p className="text-xs text-gray-400">{new Date(result.completedAt).toLocaleDateString()}</p>
-                    </td>
-                    <td className="py-3 text-right">
-                      <p className="text-sm text-gray-300 truncate max-w-[120px] ml-auto">{result.quizId?.title || 'Unknown Quiz'}</p>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${result.score >= 70 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                        }`}>
-                        {Math.round(result.score)}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-                {recentActivity.length === 0 && (
-                  <tr>
-                    <td className="py-4 text-center text-gray-500 italic">No recent activity</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-open">
+          {/* CHART SECTION */}
+          <div className="lg:col-span-2 bg-[#23272f] rounded-xl p-6 border border-[#222] shadow-lg animate-fade-in-open">
+            <h3 className="text-xl font-semibold text-white mb-6">Activity Trend (Last 30 Days)</h3>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="date" stroke="#9CA3AF" />
+                  <YAxis stroke="#9CA3AF" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px' }}
+                    itemStyle={{ color: '#E5E7EB' }}
+                  />
+                  <Line type="monotone" dataKey="tests" stroke="#8B5CF6" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="bg-[#23272f] rounded-xl p-6 border border-[#222] shadow-lg overflow-hidden animate-fade-in-open">
+            <h3 className="text-xl font-semibold text-white mb-6">Recent Activity</h3>
+            <div className="pr-2">
+              <table className="w-full text-white text-[0.98rem]">
+                <tbody>
+                  {recentActivity.map((result) => (
+                    <tr key={result._id} className="border-b border-[#23272f] last:border-b-0">
+                      <td>
+                        <div className="font-semibold">{result.userId?.name || 'Unknown User'}</div>
+                        <div className="text-[0.9em] text-[#b3b3b3]">{new Date(result.completedAt).toLocaleDateString()}</div>
+                      </td>
+                      <td className="text-right">
+                        <div className="text-[#b3b3b3] text-[0.97em] max-w-[120px] truncate">{result.quizId?.title || 'Unknown Quiz'}</div>
+                        <span className={`font-bold text-[0.95em] px-3 py-1 rounded-full ml-2 ${result.score >= 70 ? 'bg-green-200/20 text-green-400' : 'bg-red-400/20 text-red-500'}`}>{Math.round(result.score)}%</span>
+                      </td>
+                    </tr>
+                  ))}
+                  {recentActivity.length === 0 && (
+                    <tr>
+                      <td colSpan={2} className="text-center text-[#888] italic py-6">No recent activity</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </div >
+      </main>
+    </div>
   );
 }
 
 // Simple internal generic component for KPI cards
 const KpiCard = ({ title, value, icon, color }: { title: string, value: string | number, icon: string, color: string }) => {
-  const colors: any = {
+  const colors: Record<string, string> = {
     blue: "bg-blue-500/10 text-blue-400 border-blue-500/20",
     green: "bg-green-500/10 text-green-400 border-green-500/20",
     purple: "bg-purple-500/10 text-purple-400 border-purple-500/20",
@@ -194,3 +188,4 @@ const KpiCard = ({ title, value, icon, color }: { title: string, value: string |
 }
 
 export default AdminDashboard;
+
