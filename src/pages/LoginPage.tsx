@@ -81,9 +81,9 @@ function LoginPage() {
                             />
                             <label htmlFor="remember-me">Remember me</label>
                         </div>
-                        <div>
+                        {/* <div>
                             <Link to="/forgot-password">Forgot Password?</Link>
-                        </div>
+                        </div> */}
                     </div>
                 </form>
                 <div className={styles.loginFooter}>
