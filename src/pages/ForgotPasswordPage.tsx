@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { apiChangePassword } from "../api/auth.api";
+import { useAuth } from "../hooks/useAuth";
 
 function ForgotPasswordPage() {
     const navigate = useNavigate();
+    const { isAuthenticated, loading } = useAuth();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!loading && !isAuthenticated) {
+            navigate("/login");
+        }
+    }, [isAuthenticated, loading, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,22 +34,24 @@ function ForgotPasswordPage() {
             return;
         }
 
-        setLoading(true);
+        setSubmitting(true);
         try {
             await apiChangePassword({ currentPassword, newPassword, confirmPassword });
-            // After successful password change, redirect to login
             navigate("/login");
         } catch (err: unknown) {
             const error = err as AxiosError<{ error?: string }>;
             setError(error.response?.data?.error || "Failed to change password. Please try again.");
         } finally {
-            setLoading(false);
+            setSubmitting(false);
         }
     };
 
+    // Show nothing while checking auth
+    if (loading) return null;
+
     return (
-        <div className="relative flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="z-10 w-full max-w-[450px] space-y-8 rounded-2xl bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
+        <div className="relative flex min-h-screen items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
+            <div className="z-10 w-full max-w-[450px] space-y-8 rounded-lg bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
                 <div>
                     <h2 className="text-left text-3xl font-bold text-white">
                         Change Password
@@ -95,10 +106,10 @@ function ForgotPasswordPage() {
                     <div>
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={submitting}
                             className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
                         >
-                            {loading ? "Changing..." : "Change Password"}
+                            {submitting ? "Changing..." : "Change Password"}
                         </button>
                     </div>
 
