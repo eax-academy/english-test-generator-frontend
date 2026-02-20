@@ -71,9 +71,9 @@ export interface RegisterRequest {
   email: string;
   password: string;
 }
-export interface ForgotPasswordRequest {
-  email: string;
-  password: string;
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
   confirmPassword: string;
 }
 

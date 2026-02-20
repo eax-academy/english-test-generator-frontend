@@ -1,11 +1,11 @@
 import axios from "axios";
 import { AUTH_API } from "../config/api.config";
-import type { LoginRequest, RegisterRequest, AuthResponse, ForgotPasswordRequest } from "../types/types";
+import type { LoginRequest, RegisterRequest, AuthResponse, ChangePasswordRequest } from "../types/types";
 
 
 export const apiLogin = async (data: LoginRequest): Promise<AuthResponse> => {
     const response = await axios.post(`${AUTH_API}/login`, data, { withCredentials: true });
-    return response.data; 
+    return response.data;
 };
 
 export const apiAdminLogin = async (data: LoginRequest): Promise<AuthResponse> => {
@@ -28,8 +28,7 @@ export const apiLogout = async (): Promise<void> => {
     }
 };
 
-export const apiForgotPassword = async (data: ForgotPasswordRequest): Promise<void> => {
-    await axios.post(`${AUTH_API}/forgot-password`, data);
+export const apiChangePassword = async (data: ChangePasswordRequest): Promise<void> => {
+    await axios.post(`${AUTH_API}/change-password`, data, { withCredentials: true });
 };
-
 
