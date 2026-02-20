@@ -33,10 +33,3 @@ export const apiForgotPassword = async (data: ForgotPasswordRequest): Promise<vo
 };
 
 
-export const apiLogout = async () => {
-    try {
-        await axios.post(`${AUTH_API}/logout`, {}, { headers: getAuthHeader() });
-    } catch (e) {
-        console.error("Logout failed", e);
-    }
-};

@@ -52,12 +52,15 @@ function MainNavigation() {
                     </li>
                     <li>
                         {isAuthenticated ? (
-                            <button
+                            <NavLink
+                                to="/login"
                                 onClick={handleLogout}
-                                className={classes.logoutButton}
+                                className={({ isActive }) =>
+                                    isActive ? classes.active : undefined
+                                }
                             >
                                 Logout
-                            </button>
+                            </NavLink>
                         ) : (
                             <NavLink
                                 to="/login"

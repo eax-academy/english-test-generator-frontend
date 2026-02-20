@@ -11,10 +11,10 @@
 .loginBox {
   width: 100%;
   max-width: 400px;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
   border-radius: 1.25rem;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2.5rem 2rem;
   backdrop-filter: blur(8px);
   display: flex;
@@ -101,6 +101,8 @@
 }
 
 .loginFooter {
+  display: flex;
+  justify-content: space-evenly;
   margin-top: 2rem;
   color: #737373;
   font-size: 1rem;
@@ -110,6 +112,9 @@
 .loginFooter a {
   color: #fff;
   font-weight: 500;
+}
+
+.loginFooter a:hover {
   text-decoration: underline;
 }
 
@@ -118,6 +123,7 @@
     padding: 1.5rem 0.5rem;
     max-width: 95vw;
   }
+
   .loginTitle {
     font-size: 1.5rem;
   }
