@@ -88,7 +88,7 @@ function LoginPage() {
                 </form>
                 <div className={styles.loginFooter}>
                     New to English Test Generator?{' '}
-                    <Link to="/register">Sign up now</Link>.
+                    <Link to="/register">Sign up now</Link>
                 </div>
             </div>
         </div>

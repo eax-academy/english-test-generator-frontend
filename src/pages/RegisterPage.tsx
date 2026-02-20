@@ -46,8 +46,8 @@ function RegisterPage() {
     };
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
-            <div className="z-10 w-full max-w-[450px] space-y-8 rounded-lg bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
+        <div className="relative flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="z-10 w-full max-w-[450px] space-y-8 rounded-2xl bg-black/75 p-12 shadow-2xl border border-gray-800 backdrop-blur-sm">
                 <div>
                     <h2 className="text-left text-3xl font-bold text-white">
                         Sign Up
@@ -121,12 +121,11 @@ function RegisterPage() {
                     </div>
                 </form>
 
-                <div className="mt-8 text-left text-[#737373]">
+                <div className="flex justify-evenly mt-8 text-left text-[#737373]">
                     Already have an account?{" "}
                     <Link to="/login" className="font-medium text-white hover:underline">
                         Sign in now
                     </Link>
-                    .
                 </div>
             </div>
         </div>
