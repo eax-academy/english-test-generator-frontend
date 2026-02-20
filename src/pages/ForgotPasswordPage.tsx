@@ -1,28 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { apiChangePassword } from "../api/auth.api";
-import { useAuth } from "../hooks/useAuth";
 
 function ForgotPasswordPage() {
     const navigate = useNavigate();
-    const { isAuthenticated, loading } = useAuth();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [submitting, setSubmitting] = useState(false);
-
-    // Redirect to login if not authenticated
-    useEffect(() => {
-        if (!loading && !isAuthenticated) {
-            navigate("/login");
-        }
-    }, [isAuthenticated, loading, navigate]);
+    const [notLoggedIn, setNotLoggedIn] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        setNotLoggedIn(false);
 
         if (newPassword !== confirmPassword) {
             setError("New passwords do not match.");
@@ -39,15 +32,19 @@ function ForgotPasswordPage() {
             await apiChangePassword({ currentPassword, newPassword, confirmPassword });
             navigate("/login");
         } catch (err: unknown) {
-            const error = err as AxiosError<{ error?: string }>;
-            setError(error.response?.data?.error || "Failed to change password. Please try again.");
+            const axiosErr = err as AxiosError<{ error?: string }>;
+            if (axiosErr.response?.status === 401) {
+                const msg = axiosErr.response?.data?.error || "";
+                if (msg === "Authentication required" || msg === "Invalid or expired access token") {
+                    setNotLoggedIn(true);
+                    return;
+                }
+            }
+            setError(axiosErr.response?.data?.error || "Failed to change password. Please try again.");
         } finally {
             setSubmitting(false);
         }
     };
-
-    // Show nothing while checking auth
-    if (loading) return null;
 
     return (
         <div className="relative flex min-h-screen items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
@@ -61,64 +58,78 @@ function ForgotPasswordPage() {
                     </p>
                 </div>
 
-                <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
-                    <div>
-                        <input
-                            name="currentPassword"
-                            type="password"
-                            autoComplete="current-password"
-                            required
-                            className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
-                            placeholder="Current Password"
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <div>
-                        <input
-                            name="newPassword"
-                            type="password"
-                            autoComplete="new-password"
-                            required
-                            className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
-                            placeholder="New Password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <div>
-                        <input
-                            name="confirmPassword"
-                            type="password"
-                            autoComplete="new-password"
-                            required
-                            className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
-                            placeholder="Confirm New Password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </div>
-
-                    {error && <div className="text-sm text-[#e87c03]">{error}</div>}
-
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={submitting}
-                            className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                {notLoggedIn ? (
+                    <div className="rounded-md bg-yellow-500/20 p-4 border border-yellow-500/50">
+                        <p className="text-sm font-medium text-yellow-400">
+                            You need to be logged in to change your password.
+                        </p>
+                        <Link
+                            to="/login"
+                            className="mt-3 inline-block font-medium text-white underline hover:text-yellow-300"
                         >
-                            {submitting ? "Changing..." : "Change Password"}
-                        </button>
-                    </div>
-
-                    <div className="text-left text-[#737373]">
-                        <Link to="/login" className="font-medium text-white hover:underline">
-                            Back to sign in
+                            Go to Login →
                         </Link>
                     </div>
-                </form>
+                ) : (
+                    <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+                        <div>
+                            <input
+                                name="currentPassword"
+                                type="password"
+                                autoComplete="current-password"
+                                required
+                                className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
+                                placeholder="Current Password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <input
+                                name="newPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                required
+                                className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
+                                placeholder="New Password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <input
+                                name="confirmPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                required
+                                className="relative block w-full rounded-md border-0 bg-[#333] py-4 px-4 text-white placeholder-gray-400 focus:z-10 focus:bg-[#454545] focus:outline-none focus:ring-0 sm:text-base"
+                                placeholder="Confirm New Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        </div>
+
+                        {error && <div className="text-sm text-[#e87c03]">{error}</div>}
+
+                        <div>
+                            <button
+                                type="submit"
+                                disabled={submitting}
+                                className="group relative flex w-full justify-center rounded-sm bg-[#E50914] px-4 py-3 text-base font-bold text-white transition hover:bg-[#b00710] focus:outline-none disabled:opacity-70"
+                            >
+                                {submitting ? "Changing..." : "Change Password"}
+                            </button>
+                        </div>
+
+                        <div className="text-left text-[#737373]">
+                            <Link to="/login" className="font-medium text-white hover:underline">
+                                Back to sign in
+                            </Link>
+                        </div>
+                    </form>
+                )}
             </div>
         </div>
     );
