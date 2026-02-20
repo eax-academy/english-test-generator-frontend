@@ -40,6 +40,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/change-password" element={<ForgotPasswordPage />} />
               <Route path="/quiz/:quizId" element={<QuizPage />} />
               <Route path="/results/:quizId" element={<ResultsPage />} />
             </Route>

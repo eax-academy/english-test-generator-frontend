@@ -82,7 +82,7 @@ function LoginPage() {
                             <label htmlFor="remember-me">Remember me</label>
                         </div>
                         <div>
-                            <Link to="/forgot-password">Forgot Password?</Link>
+                            <Link to="/change-password">Forgot Password?</Link>
                         </div>
                     </div>
                 </form>
