@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AUTH_API } from "../config/api.config";
-import type { LoginRequest, RegisterRequest, AuthResponse, ForgotPasswordRequest, ResetPasswordRequest } from "../types/types";
+import type { LoginRequest, RegisterRequest, AuthResponse, ForgotPasswordRequest } from "../types/types";
 
 // Helper to get auth header
 export const getAuthHeader = () => {
@@ -25,10 +25,6 @@ export const apiRegister = async (data: RegisterRequest): Promise<AuthResponse> 
 
 export const apiForgotPassword = async (data: ForgotPasswordRequest): Promise<void> => {
     await axios.post(`${AUTH_API}/forgot-password`, data);
-};
-
-export const apiResetPassword = async (data: ResetPasswordRequest): Promise<void> => {
-    await axios.post(`${AUTH_API}/reset-password/${data.token}`, { password: data.newPassword });
 };
 
 export const apiLogout = async () => {
