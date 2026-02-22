@@ -24,8 +24,8 @@ function LoginPage() {
             login(response.user);
             navigate("/home");
         } catch (err) {
-            const error = axios.isAxiosError(err) ? err.response?.data?.message : "Login failed. Please check your credentials.";
-            setError(error || "Login failed. Please check your credentials.");
+            const errorMsg = axios.isAxiosError(err) ? (err.response?.data?.error || err.response?.data?.message) : "Login failed. Please check your credentials.";
+            setError(errorMsg || "Login failed. Please check your credentials.");
         } finally {
             setLoading(false);
         }

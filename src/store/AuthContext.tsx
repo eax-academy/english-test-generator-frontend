@@ -37,7 +37,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                     setIsAuthenticated(false);
                 }
             } catch (err) {
-                console.error("Auth initialization failed:", err);
+                if (axios.isAxiosError(err) && err.response?.status === 401) {
+                    // Normal behavior: user is not logged in / no refresh token
+                } else {
+                    console.error("Auth initialization failed:", err);
+                }
                 setUser(null);
                 setIsAuthenticated(false);
             } finally {
