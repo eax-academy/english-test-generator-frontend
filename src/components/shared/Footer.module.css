@@ -18,9 +18,10 @@
 
 .links {
     display: flex;
+    align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.2rem;
 }
 
 .links a {
@@ -42,6 +43,7 @@
 
 span {
     color: #ff4d4d;
+    font-size: 1rem;
     font-weight: bold;  
 }
 

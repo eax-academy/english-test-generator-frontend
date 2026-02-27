@@ -57,7 +57,7 @@ function AdminResults() {
               ) : (
                 results.map((result: Result) => (
                   <tr key={result._id}>
-                    <td>{result.userId?._id || "—"}</td>
+                    <td>{result.userId?.name || "—"}</td>
                     <td>{result.userId?.email || "—"}</td>
                     <td>{result.quizId?.title || "—"}</td>
                     <td>{result.score} / {result.totalQuestions}</td>
