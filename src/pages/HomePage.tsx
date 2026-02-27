@@ -33,13 +33,14 @@ export default function HomePage() {
         questions: [],
         userId: "", 
       });
-
+      
       console.log("Created quiz ID:", quiz._id);
       navigate(`/quiz/${quiz._id}`, { state: { quiz } });
 
     } catch (error) {
-      console.error(error);
-      setError("Failed to generate quiz. Please sign in and try again.");
+      if (error instanceof Error) {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
