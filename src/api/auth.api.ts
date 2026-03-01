@@ -43,10 +43,25 @@ export const apiLogout = async (): Promise<void> => {
   }
 };
 
+/**
+ * Request a reset link
+ * Sends only the email to the backend.
+ */
 export const apiForgotPassword = async (
-  data: ForgotPasswordRequest,
+  data: { email: string } 
 ): Promise<void> => {
   await axios.post(`${AUTH_API}/forgot-password`, data);
+};
+
+/**
+ * Submit the new password
+ * Uses the secret token from the URL to verify the user.
+ */
+export const apiResetPassword = async (
+  token: string,
+  data: { password: string }
+): Promise<void> => {
+  await axios.post(`${AUTH_API}/reset-password/${token}`, data);
 };
 
 export const apiChangePassword = async (
