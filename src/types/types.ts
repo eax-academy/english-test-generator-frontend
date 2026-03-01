@@ -77,3 +77,8 @@ export interface ForgotPasswordRequest {
   confirmPassword: string;
 }
 
+export interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}

@@ -92,7 +92,16 @@ function Sidebar() {
                     >
                         Users
                     </NavLink>
-
+                    <NavLink
+                        to="/admin/settings"
+                        onClick={() => setIsOpen(false)}
+                        className={({ isActive }) =>
+                            `text-lg font-medium tracking-wide transition
+                            ${isActive ? "text-red-600" : "text-gray-400 hover:text-white"}`
+                        }
+                    >
+                        Settings
+                    </NavLink>
                     <button
                         onClick={handleLogout}
                         className="text-gray-400 hover:text-red-600 text-lg font-medium tracking-wide transition fixed bottom-0 mb-8 hover:cursor-pointer"
