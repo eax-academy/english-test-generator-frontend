@@ -81,9 +81,16 @@ function LoginPage() {
                             />
                             <label htmlFor="remember-me">Remember me</label>
                         </div>
-                        {/* <div>
-                            <Link to="/forgot-password">Forgot Password?</Link>
-                        </div> */}
+
+                        {/* FORGOT PASSWORD LINK - NOW VISIBLE */}
+                        <div className={styles.forgotPassword}>
+                            <Link 
+                                to="/forgot-password" 
+                                className="text-sm text-gray-400 hover:underline hover:text-white transition-colors"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
                     </div>
                 </form>
                 <div className={styles.loginFooter}>
